@@ -22,6 +22,25 @@ class BasicIKnew {
         return innerFun(i, fn);
     }
 
+
+    // Test sample ```High Order Function```
+    // Function as parameter and Function return Function
+    fun fn1(fn: (Int) -> String): (Int) -> String {
+        return { m: Int -> fn(m) }
+    }
+
+    fun fn2(m: Int, fn: (Int) -> String): (Int) -> String {
+        return { i: Int -> fn(m + i) }
+    }
+
+    fun fn3(): (Int) -> (String) -> Int {
+        return { i: Int -> { j: String -> j.toInt() + i } }
+    }
+
+    fun fn4(fn: (Int) -> String): (Int) -> (String) -> Int {
+        return { i: Int -> { j: String -> j.toInt() + fn(i).toInt() } }
+    }
+
 }
 
 fun main(args: Array<String>) {
@@ -37,4 +56,16 @@ fun main(args: Array<String>) {
 
     val innerFun = demo.sampleInnerFunInsideMainFun(50)
     println(innerFun)
+
+
+    val result1 = demo.fn1(fn = { i -> i.toString() })
+    val result2 = demo.fn2(3, fn = { i -> i.toString() })
+    val result3 = demo.fn3()
+    val result4 = demo.fn4(fn = { i -> i.toString() })
+    println(result1.invoke(3))
+    println(result2.invoke(3))
+    println(result3.invoke(1).invoke("2"))
+    println(result4.invoke(1).invoke("4"))
+
+
 }
