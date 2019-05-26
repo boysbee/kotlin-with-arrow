@@ -41,9 +41,10 @@ class BasicIKnew {
         return { i: Int -> { j: String -> j.toInt() + fn(i).toInt() } }
     }
 
+
 }
 
-fun main(args: Array<String>) {
+fun main() {
     val demo = BasicIKnew()
 
     println(demo.convToString(1))
@@ -67,5 +68,16 @@ fun main(args: Array<String>) {
     println(result3.invoke(1).invoke("2"))
     println(result4.invoke(1).invoke("4"))
 
+    // Test compose function
+    val addOne: (Int) -> Int = { i -> i + 1 }
+    val addTwo: (Int) -> Int = { j -> j + 2 }
+
+    fun <A, B, C> compose(f: (B) -> C, g: (A) -> B): (A) -> C {
+        return { x -> f(g(x)) }
+    }
+
+    val composed = compose(addOne, addTwo)
+    val resultComposed = composed.invoke(1)
+    println(resultComposed)
 
 }
