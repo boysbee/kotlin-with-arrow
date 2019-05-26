@@ -1,6 +1,6 @@
 package com.sample.function
 
-class BesicIKnew {
+class BasicIKnew {
     fun convToString(n: Int): String {
         val fn: (Int) -> String = { i -> i.toString() }
         return fn.invoke(n)
@@ -8,6 +8,6 @@ class BesicIKnew {
 }
 
 fun main(args: Array<String>) {
-    val demo = BesicIKnew()
+    val demo = BasicIKnew()
     println(demo.convToString(1))
 }
