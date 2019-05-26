@@ -11,6 +11,17 @@ class BasicIKnew {
     fun convIntToMessage(i: Int, fn: (Int) -> String): String {
         return fn.invoke(i)
     }
+
+    //
+    fun sampleInnerFunInsideMainFun(i: Int): String {
+        fun innerFun(i: Int, fn: (Int) -> String): String {
+            return fn(i)
+        }
+
+        val fn = { i: Int -> "Called inner fun -> $i" }
+        return innerFun(i, fn);
+    }
+
 }
 
 fun main(args: Array<String>) {
@@ -23,4 +34,7 @@ fun main(args: Array<String>) {
         fn = { i -> "function received function as parameter and convert to string message $i" })
 
     println(intToMessage)
+
+    val innerFun = demo.sampleInnerFunInsideMainFun(50)
+    println(innerFun)
 }
