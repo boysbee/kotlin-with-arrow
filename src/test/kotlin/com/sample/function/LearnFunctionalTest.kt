@@ -16,5 +16,12 @@ object LearnFunctionalTest : Spek({
                 assertEquals("function received function as parameter and convert to string message 1", intToMessage)
             }
         }
+        describe("nested function") {
+            it("should return that call from inside main function") {
+                val innerFunResult = demo.sampleInnerFunInsideMainFun(50)
+                assertEquals("Called inner fun -> 50", innerFunResult)
+            }
+        }
     }
+
 })
