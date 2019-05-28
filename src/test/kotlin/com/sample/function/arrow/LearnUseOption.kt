@@ -2,8 +2,7 @@ package com.sample.function.arrow
 
 import arrow.core.Option
 import arrow.core.Some
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -16,11 +15,14 @@ object LearnUseOption : Spek({
             it("should just value a") {
                 assertEquals("a", a.orNull())
             }
+            it("should be `some` \"a\"") {
+                assertEquals(a, Some("a"))
+            }
             it("should be defined") {
                 assertTrue(a.isDefined())
             }
-            it("should be `some` \"a\"") {
-                assertEquals(a, Some("a"))
+            it("should be not empty") {
+                assertFalse(a.isEmpty())
             }
         }
 
