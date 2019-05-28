@@ -47,6 +47,13 @@ object LearnUseOption : Spek({
             }
         }
 
+        describe("""Option from "None" """) {
+            val none = None
+            it("""should be "None" """) {
+                assertEquals(none, None)
+            }
+        }
+
         describe("You can create Option from null value with arrow-kt") {
             it("should be initial from nullable value") {
                 val nullable: String? = null
@@ -81,6 +88,7 @@ object LearnUseOption : Spek({
                 )
             }
         }
+
 
     }
 })
