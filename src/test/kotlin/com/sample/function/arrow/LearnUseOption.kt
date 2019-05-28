@@ -96,27 +96,22 @@ object LearnUseOption : Spek({
         describe("You can use when statement to check option") {
             val aFromJustA = Option.just("a")
             val bFromNullable = Option.fromNullable(null)
-
+            // lambda
+            val checkType: (Option<String>) -> Boolean = { c: Option<String> ->
+                when (c) {
+                    is Some -> true
+                    is None -> false
+                    else -> false
+                }
+            }
             it("""should return "a" when we use when statement to check a""") {
-                assertEquals(
-                    "just a",
-                    when (aFromJustA) {
-                        is Some -> "just a"
-                        is None -> "is null"
-
-                    }
+                assertTrue(
+                    checkType(aFromJustA)
                 )
             }
 
             it("""should retun "is null" when use statement to check b """) {
-                assertEquals(
-                    "is null",
-                    when (bFromNullable) {
-                        is Some -> "just a"
-                        is None -> "is null"
-
-                    }
-                )
+                assertFalse(checkType(bFromNullable))
             }
         }
 
