@@ -55,6 +55,10 @@ class CompareCyclopsOption : DescribeSpec({
             }
 
         }
+
+        it("""should be not be present""") {
+            ofNullable.isPresent shouldBe false
+        }
     }
 
 })
