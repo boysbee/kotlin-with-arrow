@@ -52,6 +52,10 @@ object LearnUseOption : Spek({
             it("""should be "None" """) {
                 assertEquals(none, None)
             }
+
+            it("""should be return other value from "None""") {
+                assertEquals("default", none.getOrElse { "default" })
+            }
         }
 
         describe("You can create Option from null value with arrow-kt") {
