@@ -35,5 +35,9 @@ class CompareCyclopsOption : DescribeSpec({
         it("""should be null even use method "orElse" or "orElseGet" with supplier function """) {
             ofNull.orElseGet { "b" } shouldBe null
         }
+
+        it("""should be present!!!""") {
+            ofNull.isPresent shouldBe true
+        }
     }
 })
