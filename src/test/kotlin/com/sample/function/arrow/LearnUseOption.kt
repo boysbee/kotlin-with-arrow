@@ -30,5 +30,12 @@ object LearnUseOption : Spek({
             }
         }
 
+        describe("Option from nullable") {
+            val nullable = Option.fromNullable(null)
+            it("should be return other value from nullable") {
+                assertEquals("b", nullable.getOrElse { "b" })
+            }
+        }
+
     }
 })
