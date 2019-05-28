@@ -1,6 +1,7 @@
 package com.sample.function.cyclops
 
 import cyclops.control.Option
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 
@@ -33,7 +34,10 @@ class CompareCyclopsOption : DescribeSpec({
 
         val ofNull: Option<String> = Option.of(null)
         it("""should be null even use method "orElse" or "orElseGet" with supplier function """) {
-            ofNull.orElseGet { "b" } shouldBe null
+            assertSoftly {
+                ofNull.orElse("b") shouldBe null
+                ofNull.orElseGet { "b" } shouldBe null
+            }
         }
 
         it("""should be present!!!""") {
@@ -41,5 +45,16 @@ class CompareCyclopsOption : DescribeSpec({
         }
     }
 
+    describe("""You can initial null with method "ofNullable" with null value""") {
+
+        val ofNullable: Option<String> = Option.ofNullable(null)
+        it("""should be return "b" from method "orElseGet" or "orElse" when initial null with method "ofNullable" """) {
+            assertSoftly {
+                ofNullable.orElse("b") shouldBe "b"
+                ofNullable.orElseGet { "b" } shouldBe "b"
+            }
+
+        }
+    }
 
 })
