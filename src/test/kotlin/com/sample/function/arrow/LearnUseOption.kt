@@ -1,9 +1,6 @@
 package com.sample.function.arrow
 
-import arrow.core.None
-import arrow.core.Option
-import arrow.core.Some
-import arrow.core.getOrElse
+import arrow.core.*
 import org.junit.jupiter.api.Assertions.*
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -39,6 +36,14 @@ object LearnUseOption : Spek({
 
             it("""should be "None" from nullable""") {
                 assertEquals(None, nullable)
+            }
+        }
+
+        describe("You can create Option from null value with arrow-kt") {
+            it("should be initial from nullable value") {
+                val nullable: String? = null
+                val nullableOption = nullable.toOption()
+                assertEquals(None, nullableOption)
             }
         }
 
