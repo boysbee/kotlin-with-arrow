@@ -108,7 +108,7 @@ object LearnUseOption : Spek({
                 )
             }
 
-            it("""shuould retun "is null" when use statement to check b """) {
+            it("""should retun "is null" when use statement to check b """) {
                 assertEquals(
                     "is null",
                     when (bFromNullable) {
