@@ -28,4 +28,12 @@ class CompareCyclopsOption : DescribeSpec({
             ofA.isPresent shouldBe true
         }
     }
+
+    describe("""You can initial null but you have to append "?" suffix of type "A" to tell the compiler this value should be nullable""") {
+
+        val ofNull: Option<String?> = Option.of(null)
+        it("""should be null even use method "orElse" or "orElseGet" with supplier function """) {
+            ofNull.orElseGet { "b" } shouldBe null
+        }
+    }
 })
