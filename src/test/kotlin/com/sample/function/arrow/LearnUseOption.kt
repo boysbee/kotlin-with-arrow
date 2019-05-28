@@ -115,6 +115,21 @@ object LearnUseOption : Spek({
             }
         }
 
+        describe("""Use flatmap to sequence computation""") {
+            val a: Option<Int> = Option.just(1)
+            val b: Option<Int> = Option.just(2)
+            val c: Option<Int> = None
+            it("""should result is 3 when computation value of a and b""") {
+                val result = a.flatMap { f1 -> b.flatMap { f2 -> Some(f1 + f2) } }
+                assertEquals(3, result.getOrElse { 0 })
+            }
+
+            it("""should "0" computation value of a, b and c when c is "None" """) {
+                val result = a.flatMap { f1 -> b.flatMap { f2 -> c.flatMap { f3 -> Some(f1 + f2 + f3) } } }
+                assertEquals(0, result.getOrElse { 0 })
+            }
+        }
+
 
     }
 })
