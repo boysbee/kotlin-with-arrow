@@ -28,6 +28,25 @@ object LearnUseOption : Spek({
             }
         }
 
+        describe("""Option with "Some""") {
+            val someA = Some("a")
+            it("should just value a") {
+                assertEquals("a", someA.orNull())
+            }
+            it("""should be "Some("a")" """) {
+                assertEquals(someA, Some("a"))
+            }
+            it("should be defined") {
+                assertTrue(someA.isDefined())
+            }
+            it("should be not empty") {
+                assertFalse(someA.isEmpty())
+            }
+            it("""should return "a" when "getOrElse" from just "a"""") {
+                assertEquals("a", someA.getOrElse { "b" })
+            }
+        }
+
         describe("Option from nullable") {
             val nullable = Option.fromNullable(null)
             it("should be return other value from nullable") {
