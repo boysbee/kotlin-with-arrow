@@ -135,7 +135,7 @@ object LearnUseOption : Spek({
             val a: Option<Int> = Option.just(1)
             val b: Option<Int> = Option.just(2)
             val c: Option<Int> = None
-
+            // Look like the same as `flatMap` operation but like sequential computation
             it("""should result is 3 when computation value of a and b""") {
                 val result = binding {
                     val (f1) = a
