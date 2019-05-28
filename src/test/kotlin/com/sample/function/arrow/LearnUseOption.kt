@@ -37,6 +37,10 @@ object LearnUseOption : Spek({
             it("""should be "None" from nullable""") {
                 assertEquals(None, nullable)
             }
+
+            it("should be not defined") {
+                assertFalse(nullable.isDefined())
+            }
         }
 
         describe("You can create Option from null value with arrow-kt") {
