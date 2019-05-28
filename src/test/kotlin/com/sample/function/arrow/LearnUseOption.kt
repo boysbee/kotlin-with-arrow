@@ -38,7 +38,7 @@ object LearnUseOption : Spek({
                 assertEquals(None, nullable)
             }
 
-            it("should be not defined") {
+            it("should be undefined") {
                 assertFalse(nullable.isDefined())
             }
 
@@ -55,6 +55,10 @@ object LearnUseOption : Spek({
 
             it("""should be return other value from "None""") {
                 assertEquals("default", none.getOrElse { "default" })
+            }
+
+            it("should be undefined") {
+                assertFalse(none.isDefined())
             }
         }
 
