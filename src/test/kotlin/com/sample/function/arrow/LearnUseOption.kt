@@ -41,6 +41,10 @@ object LearnUseOption : Spek({
             it("should be not defined") {
                 assertFalse(nullable.isDefined())
             }
+
+            it("should be empty") {
+                assertTrue(nullable.isEmpty())
+            }
         }
 
         describe("You can create Option from null value with arrow-kt") {
