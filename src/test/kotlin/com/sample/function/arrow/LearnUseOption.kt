@@ -1,6 +1,7 @@
 package com.sample.function.arrow
 
 import arrow.core.*
+import arrow.core.extensions.option.monad.binding
 import org.junit.jupiter.api.Assertions.*
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -115,7 +116,7 @@ object LearnUseOption : Spek({
             }
         }
 
-        describe("""Use flatmap to sequence computation""") {
+        describe("""Use flatMap to sequence computation""") {
             val a: Option<Int> = Option.just(1)
             val b: Option<Int> = Option.just(2)
             val c: Option<Int> = None
@@ -130,6 +131,30 @@ object LearnUseOption : Spek({
             }
         }
 
+        describe("""Use Monad ( binding )  to sequence computation""") {
+            val a: Option<Int> = Option.just(1)
+            val b: Option<Int> = Option.just(2)
+            val c: Option<Int> = None
+
+            it("""should result is 3 when computation value of a and b""") {
+                val result = binding {
+                    val (f1) = a
+                    val (f2) = b
+                    f1 + f2
+                }
+                assertEquals(3, result.getOrElse { 0 })
+            }
+
+            it("""should "0" computation value of a, b and c when c is "None" """) {
+                val result = binding {
+                    val (f1) = a
+                    val (f2) = b
+                    val (f3) = c
+                    f1 + f2 + f3
+                }
+                assertEquals(0, result.getOrElse { 0 })
+            }
+        }
 
     }
 })
