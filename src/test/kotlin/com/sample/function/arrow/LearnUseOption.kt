@@ -1,5 +1,6 @@
 package com.sample.function.arrow
 
+import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
 import arrow.core.getOrElse
@@ -34,6 +35,10 @@ object LearnUseOption : Spek({
             val nullable = Option.fromNullable(null)
             it("should be return other value from nullable") {
                 assertEquals("b", nullable.getOrElse { "b" })
+            }
+
+            it("""should be "None" from nullable""") {
+                assertEquals(None, nullable)
             }
         }
 
