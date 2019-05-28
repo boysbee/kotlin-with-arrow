@@ -17,4 +17,15 @@ class CompareCyclopsOption : DescribeSpec({
             a.isPresent shouldBe true
         }
     }
+
+    describe("Initial Option method of") {
+        // This initial function like method "some"
+        val ofA = Option.of("a")
+        it("should just some value a") {
+            ofA.orElse("b") shouldBe "a"
+        }
+        it("should be present") {
+            ofA.isPresent shouldBe true
+        }
+    }
 })
