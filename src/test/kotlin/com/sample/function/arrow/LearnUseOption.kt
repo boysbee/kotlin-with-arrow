@@ -60,6 +60,10 @@ object LearnUseOption : Spek({
             it("should be undefined") {
                 assertFalse(none.isDefined())
             }
+
+            it("should be empty") {
+                assertTrue(none.isEmpty())
+            }
         }
 
         describe("You can create Option from null value with arrow-kt") {
