@@ -1,6 +1,9 @@
 package com.sample.function.arrow
 
 import arrow.core.Either
+import arrow.core.getOrElse
+import arrow.core.right
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.DescribeSpec
@@ -26,5 +29,14 @@ class LearnUseEither : DescribeSpec({
             l.isRight() shouldNotBe true
         }
 
+    }
+    describe("""Either in arrow-kt can initiate instance with arbitrary data types""") {
+        it("should initiate with Int") {
+            val r: Either<Nothing, Int> = 7.right()
+            assertSoftly {
+                r.isRight() shouldBe true
+                r.getOrElse { -1 } shouldBe (7)
+            }
+        }
     }
 })
