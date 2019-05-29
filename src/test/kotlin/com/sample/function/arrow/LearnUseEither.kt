@@ -81,9 +81,13 @@ class LearnUseEither : DescribeSpec({
                 result(l) shouldBe false
             }
         }
-        it("""should return left side if right side is null value """){
+        it("""should return left side if right side is null value when check with "leftIfNull" """){
             val r = Either.right(null)
             r.leftIfNull({ "is null value"} ) shouldBe Left("is null value")
+        }
+        it("""should return left side check null value with "rightIfNotNull" """) {
+            val r = null.rightIfNotNull { "is left side" }
+            r shouldBe Left("is left side")
         }
     }
 })
