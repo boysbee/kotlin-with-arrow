@@ -9,9 +9,9 @@ class LearnUseEither : DescribeSpec({
     describe("""Either, learn to use arrow-kt data type "Either" """) {
         // Let's start with how to initiate an instance of either data type.
         // Right side for successful value
-        val r = Either.right("success")
+        val r: Either<String, String> = Either.right("success")
         // Left side for failure value
-        val l = Either.left("failure")
+        val l: Either<String, String> = Either.left("failure")
         it("should return true if right is right side") {
             r.isRight() shouldBe true
         }
