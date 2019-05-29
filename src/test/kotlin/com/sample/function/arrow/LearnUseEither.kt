@@ -66,5 +66,20 @@ class LearnUseEither : DescribeSpec({
                 l.getOrElse { "Default" } shouldBe "Default"
             }
         }
+        it("""should return true when we use "when" statement to check """) {
+            val r = "Successfully".right()
+            val l = "Failure".left()
+            val result: (Either<String, String>) -> Boolean = { e ->
+                when (e) {
+                    is Either.Right -> true
+                    is Either.Left -> false
+                    else -> false
+                }
+            }
+            assertSoftly {
+                result(r) shouldBe true
+                result(l) shouldBe false
+            }
+        }
     }
 })
