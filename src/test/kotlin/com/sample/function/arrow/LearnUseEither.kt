@@ -2,6 +2,7 @@ package com.sample.function.arrow
 
 import arrow.core.Either
 import arrow.core.getOrElse
+import arrow.core.left
 import arrow.core.right
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
@@ -33,9 +34,17 @@ class LearnUseEither : DescribeSpec({
     describe("""Either in arrow-kt can initiate instance with arbitrary data types""") {
         it("should initiate with Int") {
             val r: Either<Nothing, Int> = 7.right()
+            val l: Either<Int, Int> = (-1).left()
+            /*
+            left() with Nothing can not compile.
+            val lFromNothing: Either<Nothing, Int> = Nothing.left()
+            */
             assertSoftly {
                 r.isRight() shouldBe true
                 r.getOrElse { -1 } shouldBe (7)
+                l.isLeft() shouldBe true
+                // mapLeft should be return Either.Left
+                l.mapLeft { it + 0 } shouldBe Either.Left((-1))
             }
         }
     }
