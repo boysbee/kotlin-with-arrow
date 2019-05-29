@@ -1,9 +1,6 @@
 package com.sample.function.arrow
 
-import arrow.core.Either
-import arrow.core.getOrElse
-import arrow.core.left
-import arrow.core.right
+import arrow.core.*
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -45,6 +42,28 @@ class LearnUseEither : DescribeSpec({
                 l.isLeft() shouldBe true
                 // mapLeft should be return Either.Left
                 l.mapLeft { it + 0 } shouldBe Either.Left((-1))
+            }
+        }
+    }
+    describe("""Either can initiate instance based on a predicate""") {
+        fun evenOrOdd(x: Int): Boolean = x % 2 == 0
+        it("should be initiate right side when condition is true") {
+            val r = Either.cond(evenOrOdd(2), { "Odd" }, { "Even" })
+            assertSoftly {
+                r.isRight() shouldBe true
+                r.isLeft() shouldNotBe true
+                r.toOption().orNull() shouldBe "Odd"
+            }
+        }
+        it("should be initiate left side when condition is false") {
+            val l = Either.cond(evenOrOdd(3), { "Odd" }, { "Even" })
+            assertSoftly {
+                l.isLeft() shouldBe true
+                l.isRight() shouldNotBe true
+                // Use "getOrHandle" when you would like to handle the left value.
+                // If you don not handle the a left value you can use "getOrElse" which is supplier function instead.
+                l.getOrHandle { "It's $it" } shouldBe "It's Even"
+                l.getOrElse { "Default" } shouldBe "Default"
             }
         }
     }
