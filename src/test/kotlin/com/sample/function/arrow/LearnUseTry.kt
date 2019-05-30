@@ -1,6 +1,7 @@
 package com.sample.function.arrow
 
 import arrow.core.Try
+import arrow.core.getOrDefault
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -33,6 +34,16 @@ class LearnUseTry : FreeSpec({
                     }
 
                 }
+            }
+        }
+        """You can use "getOrDefault" when we need a default value when we computation is return failure """ - {
+            val defaultValue = "The default value"
+            val expect = "The default value"
+            val r = Try {
+                throw BadRequestException()
+            }
+            "should be return a default value" {
+                r.getOrDefault { defaultValue } shouldBe expect
             }
         }
 
