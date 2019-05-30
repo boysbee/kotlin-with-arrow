@@ -97,5 +97,16 @@ class LearnUseEither : DescribeSpec({
             val resultOfSum = r1.flatMap { a -> r2.flatMap { b -> r3.flatMap { c -> (a + b + c).right() } } }
             resultOfSum.orNull() shouldBe 6
         }
+
+        it("""should be return "Left" side when we have some "Left" side on a computation""") {
+            val r1: Either<Int, Int> = 1.right()
+            val r2: Either<Int, Int> = 2.right()
+            val r3: Either<Int, Int> = 3.left()
+            val resultOfSum = r1.flatMap { a -> r2.flatMap { b -> r3.flatMap { c -> (a + b + c).right() } } }
+            assertSoftly {
+                resultOfSum shouldBe Left(3)
+                resultOfSum.getOrElse { "Not continue be cause is r3 is on Left" } shouldBe "Not continue be cause is r3 is on Left"
+            }
+        }
     }
 })
