@@ -95,5 +95,7 @@ class LearnUseTry : FreeSpec({
                 }
             }
         }
+
+        // TODO case flatMap and monad
     }
 })
