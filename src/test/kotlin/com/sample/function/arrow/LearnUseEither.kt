@@ -151,5 +151,16 @@ Please specify it explicitly.
             }
         }
 
+        it("should be handle both side with \"fold\"") {
+            // operation "fold" will extrac the value from either or provide a default if the value is Left
+            val resultTrue = Either.cond(true, { 10 }, { -1 })
+            val resultFalse = Either.cond(false, { 10 }, { -1 })
+            assertSoftly {
+                resultTrue.fold({ it * 99 }, { it * 99 }) shouldBe 990
+                resultFalse.fold({ it * 99 }, { it * 99 }) shouldBe -99
+
+            }
+        }
+
     }
 })
