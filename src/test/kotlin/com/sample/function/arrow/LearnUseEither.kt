@@ -114,6 +114,7 @@ class LearnUseEither : DescribeSpec({
             val r1: Either<Int, Int> = 1.right()
             val r2: Either<Int, Int> = 2.right()
             val r3: Either<Int, Int> = 3.right()
+            val r4: Either<Int, Int> = (-1).left()
             // should be fill the specific Type inference of the result Left and Right side because compiler will compile failed with message as below.
             /*
              Type inference failed: Not enough information to infer parameter L in fun <L, A> binding(arg0: suspend MonadContinuation<Kind<ForEither, L>, *>.() -> A): Either<L, A>
@@ -128,6 +129,25 @@ Please specify it explicitly.
             assertSoftly {
                 result shouldBe Right(6)
                 result.orNull() shouldBe 6
+            }
+        }
+
+        it("""should be result of Monad("binding") same like "flatMap" to computation the "Left" should not continue """) {
+            val r1: Either<Int, Int> = 1.right()
+            val r2: Either<Int, Int> = 2.right()
+            val r3: Either<Int, Int> = 3.right()
+            val r4: Either<Int, Int> = (-1).left()
+
+            val result: Either<Int, Int> = binding {
+                val (a) = r1
+                val (b) = r2
+                val (c) = r3
+                val (d) = r4
+                a + b + c + d
+            }
+            assertSoftly {
+                result shouldBe Left(-1)
+                result.getOrHandle { l -> l * 99 } shouldBe (-99)
             }
         }
 
