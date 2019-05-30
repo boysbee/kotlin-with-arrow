@@ -10,13 +10,25 @@ class LearnUseTry : FreeSpec({
     """Try, learn to use arrow-kt data type "Try" """ - {
         // Let's start with how to initiate an instance of Try data type.
         """Let's start with initiate instance of "Try" """ - {
-            val tryRequestOtp = Try { requestOtp() }
+            val tryRequestOtpFailure = Try { requestOtpFailure() }
             "request otp but operation this failure" - {
                 "So result of request otp is failure" - {
                     "Try.failure should be" {
                         assertSoftly {
-                            tryRequestOtp.isFailure() shouldBe true
-                            tryRequestOtp.isSuccess() shouldNotBe true
+                            tryRequestOtpFailure.isFailure() shouldBe true
+                            tryRequestOtpFailure.isSuccess() shouldNotBe true
+                        }
+                    }
+
+                }
+            }
+            val tryRequestOtpSuccess = Try { requestOtpSuccessfully() }
+            "request otp but operation this successfully" - {
+                "So result of request otp is success" - {
+                    "Try.success should be" {
+                        assertSoftly {
+                            tryRequestOtpSuccess.isSuccess() shouldBe true
+                            tryRequestOtpSuccess.isFailure() shouldNotBe true
                         }
                     }
 
