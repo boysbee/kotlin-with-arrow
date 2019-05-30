@@ -81,13 +81,21 @@ class LearnUseEither : DescribeSpec({
                 result(l) shouldBe false
             }
         }
-        it("""should return left side if right side is null value when check with "leftIfNull" """){
+        it("""should return left side if right side is null value when check with "leftIfNull" """) {
             val r = Either.right(null)
-            r.leftIfNull({ "is null value"} ) shouldBe Left("is null value")
+            r.leftIfNull({ "is null value" }) shouldBe Left("is null value")
         }
         it("""should return left side check null value with "rightIfNotNull" """) {
             val r = null.rightIfNotNull { "is left side" }
             r shouldBe Left("is left side")
+        }
+
+        it("""should be continue the "Right" side when we use "flatMap" to computation """) {
+            val r1 = 1.right()
+            val r2 = 2.right()
+            val r3 = 3.right()
+            val resultOfSum = r1.flatMap { a -> r2.flatMap { b -> r3.flatMap { c -> (a + b + c).right() } } }
+            resultOfSum.orNull() shouldBe 6
         }
     }
 })
