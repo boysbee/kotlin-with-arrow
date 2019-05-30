@@ -1,7 +1,6 @@
 package com.sample.function.arrow
 
-import arrow.core.Try
-import arrow.core.getOrDefault
+import arrow.core.*
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -36,14 +35,38 @@ class LearnUseTry : FreeSpec({
                 }
             }
         }
-        """You can use "getOrDefault" when we need a default value when we computation is return failure """ - {
+
+        """How do we solve a failure when computation has been failure """ - {
             val defaultValue = "The default value"
             val expect = "The default value"
-            val r = Try {
+            val tryWithBadRequest = Try {
                 throw BadRequestException()
             }
-            "should be return a default value" {
-                r.getOrDefault { defaultValue } shouldBe expect
+            "when use \"getOrDefault\"" - {
+                "should be return a default value" {
+                    tryWithBadRequest.getOrDefault { defaultValue } shouldBe expect
+                    // getOrDefault received consume function that ignore throwable detail
+                }
+            }
+
+            """Or you can use "recover" to solve failure """ - {
+                "when we use \"recover\"" - {
+                    "should be return a \"Success\" contain a new value" {
+                        tryWithBadRequest.recover { ex: Throwable -> "a new value" } shouldBe Success("a new value")
+                        // recover received supplier function that not ignore throwable detail
+                        // you can rid throwable if you don want to use throwable.
+                    }
+                }
+            }
+
+            """Or you can use "getOrElse" """ - {
+                "when we use \"getOrElse\"" - {
+                    "should be return the new value like recover " {
+                        tryWithBadRequest.getOrElse { ex: Throwable -> "a new value" } shouldBe "a new value"
+                        // getOrElse like recover received supplier function that not ignore throwable detail
+                        // you can rid throwable if you don want to use throwable.
+                    }
+                }
             }
         }
 
