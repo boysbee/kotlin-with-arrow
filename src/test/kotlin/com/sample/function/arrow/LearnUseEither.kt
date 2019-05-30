@@ -1,6 +1,7 @@
 package com.sample.function.arrow
 
 import arrow.core.*
+import arrow.core.extensions.either.monad.binding
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -108,5 +109,27 @@ class LearnUseEither : DescribeSpec({
                 resultOfSum.getOrElse { "Not continue be cause is r3 is on Left" } shouldBe "Not continue be cause is r3 is on Left"
             }
         }
+
+        it("""should be result of Monad("binding") same like "flatMap" to computation""") {
+            val r1: Either<Int, Int> = 1.right()
+            val r2: Either<Int, Int> = 2.right()
+            val r3: Either<Int, Int> = 3.right()
+            // should be fill the specific Type inference of the result Left and Right side because compiler will compile failed with message as below.
+            /*
+             Type inference failed: Not enough information to infer parameter L in fun <L, A> binding(arg0: suspend MonadContinuation<Kind<ForEither, L>, *>.() -> A): Either<L, A>
+Please specify it explicitly.
+             */
+            val result: Either<Int, Int> = binding {
+                val (a) = r1
+                val (b) = r2
+                val (c) = r3
+                a + b + c
+            }
+            assertSoftly {
+                result shouldBe Right(6)
+                result.orNull() shouldBe 6
+            }
+        }
+
     }
 })
