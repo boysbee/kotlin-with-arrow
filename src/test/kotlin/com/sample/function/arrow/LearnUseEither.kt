@@ -90,7 +90,8 @@ class LearnUseEither : DescribeSpec({
             val r = null.rightIfNotNull { "is left side" }
             r shouldBe Left("is left side")
         }
-
+    }
+    describe("When we use operation \"flatMap\" with either data type ") {
         it("""should be continue the "Right" side when we use "flatMap" to computation """) {
             val r1 = 1.right()
             val r2 = 2.right()
@@ -109,7 +110,8 @@ class LearnUseEither : DescribeSpec({
                 resultOfSum.getOrElse { "Not continue be cause is r3 is on Left" } shouldBe "Not continue be cause is r3 is on Left"
             }
         }
-
+    }
+    describe("With Monad(\"binding\")  ") {
         it("""should be result of Monad("binding") same like "flatMap" to computation""") {
             val r1: Either<Int, Int> = 1.right()
             val r2: Either<Int, Int> = 2.right()
@@ -150,7 +152,9 @@ Please specify it explicitly.
                 result.getOrHandle { l -> l * 99 } shouldBe (-99)
             }
         }
+    }
 
+    describe("When either with \"fold\" ") {
         it("should be handle both side with \"fold\"") {
             // operation "fold" will extrac the value from either or provide a default if the value is Left
             val resultTrue = Either.cond(true, { 10 }, { -1 })
@@ -161,6 +165,6 @@ Please specify it explicitly.
 
             }
         }
-
     }
+
 })
