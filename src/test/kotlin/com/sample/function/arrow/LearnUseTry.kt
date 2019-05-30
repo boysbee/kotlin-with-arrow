@@ -2,7 +2,9 @@ package com.sample.function.arrow
 
 import arrow.core.*
 import io.kotlintest.assertSoftly
+import io.kotlintest.matchers.types.shouldBeSameInstanceAs
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldHave
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.FreeSpec
 
@@ -70,6 +72,28 @@ class LearnUseTry : FreeSpec({
             }
         }
 
+        """Try can transform to Either""" - {
+            "when we need either type" - {
+                "use \"toEither\" " - {
+                    "when Try with computation success" - {
+                        val r = Try {
+                            "success"
+                        }
+                        "should return \"Right\" side of Either" {
+                            r.toEither() shouldBe Either.right("success")
+                        }
+                    }
+                    "when Try with computation is failure" -{
+                        val badTry = Try {
+                            throw BadRequestException()
+                        }
+                        "should return \"Left\" side of Either" {
+                            badTry.toEither().isLeft() shouldBe true
+                        }
+                    }
 
+                }
+            }
+        }
     }
 })
