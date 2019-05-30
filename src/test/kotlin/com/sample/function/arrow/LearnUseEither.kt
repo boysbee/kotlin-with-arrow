@@ -116,7 +116,6 @@ class LearnUseEither : DescribeSpec({
             val r1: Either<Int, Int> = 1.right()
             val r2: Either<Int, Int> = 2.right()
             val r3: Either<Int, Int> = 3.right()
-            val r4: Either<Int, Int> = (-1).left()
             // should be fill the specific Type inference of the result Left and Right side because compiler will compile failed with message as below.
             /*
              Type inference failed: Not enough information to infer parameter L in fun <L, A> binding(arg0: suspend MonadContinuation<Kind<ForEither, L>, *>.() -> A): Either<L, A>
