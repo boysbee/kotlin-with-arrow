@@ -70,16 +70,28 @@ class LearnUseTry : FreeSpec({
                 }
             }
             """Or you can use "fold" when you want to handle both cases success and failure""" - {
-                """when use "fold" """ - {
+                """when use "fold" when Try.success""" - {
                     val r: Try<String> = Try {
                         "Success"
                     }
                     val result = r.fold(
                         { { "this failure" } },
                         { { "this success" } })
-                    "should return new value for success" {
+                    "should return a new value for success" {
                         // use "fold" will return function that you have to invoke function before it will be evaluate to actual value
                         result.invoke() shouldBe "this success"
+                    }
+                }
+
+                """when use "fold" when Try.failure""" - {
+                    val rFailure: Try<String> = Try {
+                        throw BadRequestException()
+                    }
+                    val result = rFailure.fold(
+                        { { "this failure" } },
+                        { { "this success" } })
+                    "should return a new value for failure" {
+                        result.invoke() shouldBe "this failure"
                     }
                 }
             }
