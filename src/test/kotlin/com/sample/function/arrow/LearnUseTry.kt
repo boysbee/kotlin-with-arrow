@@ -2,9 +2,7 @@ package com.sample.function.arrow
 
 import arrow.core.*
 import io.kotlintest.assertSoftly
-import io.kotlintest.matchers.types.shouldBeSameInstanceAs
 import io.kotlintest.shouldBe
-import io.kotlintest.shouldHave
 import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.FreeSpec
 
@@ -83,7 +81,7 @@ class LearnUseTry : FreeSpec({
                             r.toEither() shouldBe Either.right("success")
                         }
                     }
-                    "when Try with computation is failure" -{
+                    "when Try with computation is failure" - {
                         val badTry = Try {
                             throw BadRequestException()
                         }
@@ -96,6 +94,30 @@ class LearnUseTry : FreeSpec({
             }
         }
 
-        // TODO case flatMap and monad
+        """Try with "flatMap" computation """ - {
+            "when we try computation is success" - {
+                val r = Try {
+                    "success"
+                }
+                "Then use flatMap" - {
+                    "when try is success it should return \"SUCCESS\"" {
+                        r.flatMap { f: String -> Try.Success(f.toUpperCase()) }.getOrElse { "not success" } shouldBe "SUCCESS"
+                    }
+                }
+
+            }
+
+            "when we try computation is failure" - {
+                val r = Try {
+                    throw BadRequestException()
+                }
+                "Then use flatMap" - {
+                    "when try is failure it should return \"NOT SUCCESS\"" {
+                        r.flatMap { f: String -> Try.Success(f.toUpperCase()) }.getOrElse { "not success".toUpperCase() } shouldBe "NOT SUCCESS"
+                    }
+                }
+
+            }
+        }
     }
 })
