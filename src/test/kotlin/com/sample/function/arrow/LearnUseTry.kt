@@ -1,6 +1,7 @@
 package com.sample.function.arrow
 
 import arrow.core.*
+import arrow.core.extensions.`try`.monad.binding
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldNotBe
@@ -100,8 +101,9 @@ class LearnUseTry : FreeSpec({
                     "success"
                 }
                 "Then use flatMap" - {
+                    val result = r.flatMap { f: String -> Try.Success(f.toUpperCase()) }.getOrElse { "not success" }
                     "when try is success it should return \"SUCCESS\"" {
-                        r.flatMap { f: String -> Try.Success(f.toUpperCase()) }.getOrElse { "not success" } shouldBe "SUCCESS"
+                        result shouldBe "SUCCESS"
                     }
                 }
 
@@ -112,8 +114,53 @@ class LearnUseTry : FreeSpec({
                     throw BadRequestException()
                 }
                 "Then use flatMap" - {
+                    val result = r.flatMap { f: String -> Try.Success(f.toUpperCase()) }
+                        .getOrElse { "not success".toUpperCase() }
                     "when try is failure it should return \"NOT SUCCESS\"" {
-                        r.flatMap { f: String -> Try.Success(f.toUpperCase()) }.getOrElse { "not success".toUpperCase() } shouldBe "NOT SUCCESS"
+                        result shouldBe "NOT SUCCESS"
+                    }
+                }
+
+            }
+        }
+
+        """Try with "Monad.binding" computation """ - {
+            "when we try computation is success" - {
+                val r1 = Try {
+                    "once"
+                }
+                val r2 = Try {
+                    "twice"
+                }
+                "Then use binding" - {
+                    val result = binding {
+                        val (a) = r1
+                        val (b) = r2
+                        ("success $a $b").toUpperCase()
+                    }.getOrElse { "NOT SUCCESS" }
+                    "when try is success it should return \"SUCCESS ONCE TWICE\"" {
+                        result shouldBe "SUCCESS ONCE TWICE"
+                    }
+                }
+
+            }
+
+            "when we try computation is failure" - {
+                val rFailure = Try {
+                    throw BadRequestException()
+                }
+                val rSuccess = Try {
+                    throw BadRequestException()
+                }
+
+                "Then use binding" - {
+                    val result = binding {
+                        val (a) = rFailure
+                        val (b) = rSuccess
+                        ("success $a $b").toUpperCase()
+                    }.getOrElse { "NOT SUCCESS" }
+                    "when try is failure it should return \"NOT SUCCESS\"" {
+                        result shouldBe "NOT SUCCESS"
                     }
                 }
 
