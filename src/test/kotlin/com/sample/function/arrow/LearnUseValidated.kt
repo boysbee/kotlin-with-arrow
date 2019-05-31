@@ -19,4 +19,16 @@ class LearnUseValidated : DescribeSpec({
 
     }
 
+    describe("""Learn how to use with simple function like check login user""") {
+        fun validateLogin(u: String): Validated<String, String> {
+            if (u.isBlank() or u.isEmpty()) {
+                return Validated.Invalid("Username is empty")
+            }
+            return Validated.Valid("Username is valid")
+        }
+        it("""should valid when username is not blank""") {
+            validateLogin("test").isValid shouldBe true
+        }
+    }
+
 })
