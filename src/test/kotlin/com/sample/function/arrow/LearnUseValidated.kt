@@ -31,4 +31,11 @@ class LearnUseValidated : DescribeSpec({
         }
     }
 
+    describe("""Validate should be transform to Either""") {
+        it("""should be Either.success when Validate.Valid""") {
+            val validToEither = Validated.Valid("Success").toEither()
+            validToEither.isRight() shouldBe true
+        }
+    }
+
 })
