@@ -1,6 +1,7 @@
 package com.sample.function.arrow
 
 import arrow.core.Either
+import arrow.core.Try
 import arrow.data.Validated
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
@@ -49,6 +50,15 @@ class LearnUseValidated : DescribeSpec({
         it("""should initiate from Either""") {
             val valid = Validated.fromEither(Either.right("Success"))
             val invalid = Validated.fromEither(Either.left(BadRequestException()))
+            assertSoftly {
+                valid.isValid shouldBe true
+                invalid.isInvalid shouldBe true
+            }
+        }
+
+        it("""should initiate from Try""") {
+            val valid = Validated.fromTry(Try.Success("Success"))
+            val invalid = Validated.fromTry(Try.Failure(BadRequestException()))
             assertSoftly {
                 valid.isValid shouldBe true
                 invalid.isInvalid shouldBe true
