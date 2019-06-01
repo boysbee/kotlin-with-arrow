@@ -1,6 +1,8 @@
 package com.sample.function.arrow
 
 import arrow.core.Either
+import arrow.core.None
+import arrow.core.Option
 import arrow.core.Try
 import arrow.data.Validated
 import io.kotlintest.assertSoftly
@@ -59,6 +61,16 @@ class LearnUseValidated : DescribeSpec({
         it("""should initiate from Try""") {
             val valid = Validated.fromTry(Try.Success("Success"))
             val invalid = Validated.fromTry(Try.Failure(BadRequestException()))
+            assertSoftly {
+                valid.isValid shouldBe true
+                invalid.isInvalid shouldBe true
+            }
+        }
+
+        it("""should initiate from Option""") {
+            val valid = Validated.fromOption(Option.just("Success"), { "Is null" })
+            // If 1st parameter on method "fromOption" is "None" then return Validated.Invalid
+            val invalid = Validated.fromOption(None, { "Is null" })
             assertSoftly {
                 valid.isValid shouldBe true
                 invalid.isInvalid shouldBe true
