@@ -31,5 +31,16 @@ class LearnUseIor : DescribeSpec({
                 l.map { "It is $it" }.getOrElse { None } shouldBe None
             }
         }
+
+        it("""should be return "Both" side """) {
+            val b = Ior.Both("Failure", "Ok")
+            assertSoftly {
+                b.isLeft shouldNotBe true
+                b.isRight shouldNotBe true
+                b.isBoth shouldBe true
+                // Both side can not map a value in Right side like Either.
+                b.map { "It is $it" }.getOrElse { None } shouldBe "It is Ok"
+            }
+        }
     }
 })
