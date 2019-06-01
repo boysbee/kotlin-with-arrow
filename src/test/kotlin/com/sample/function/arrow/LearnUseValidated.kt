@@ -22,6 +22,13 @@ class LearnUseValidated : DescribeSpec({
             inValidResult.isInvalid shouldBe true
         }
 
+        it("should compute with \"fold\" method when you handle both valid and invalid function") {
+            assertSoftly {
+                validResult.fold({ None }, { it }) shouldBe "Success"
+                inValidResult.fold({ None }, { it }) shouldBe None
+            }
+        }
+
     }
 
     describe("""Learn how to use with simple function like check login user""") {
