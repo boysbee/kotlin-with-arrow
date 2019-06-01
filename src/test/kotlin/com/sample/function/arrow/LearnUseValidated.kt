@@ -1,6 +1,8 @@
 package com.sample.function.arrow
 
+import arrow.core.Either
 import arrow.data.Validated
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 
@@ -38,8 +40,19 @@ class LearnUseValidated : DescribeSpec({
         }
 
         it("""should be Either.Left when Validate.Invalid""") {
-            val validToEither = Validated.Invalid("failure").toEither()
-            validToEither.isLeft() shouldBe true
+            val invalidToEither = Validated.Invalid("failure").toEither()
+            invalidToEither.isLeft() shouldBe true
+        }
+    }
+
+    describe("""Validated can initiate instance from other data type""") {
+        it("""should initiate from Either""") {
+            val valid = Validated.fromEither(Either.right("Success"))
+            val invalid = Validated.fromEither(Either.left(BadRequestException()))
+            assertSoftly {
+                valid.isValid shouldBe true
+                invalid.isInvalid shouldBe true
+            }
         }
     }
 
