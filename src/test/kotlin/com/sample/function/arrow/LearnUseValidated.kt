@@ -69,10 +69,17 @@ class LearnUseValidated : DescribeSpec({
 
         it("""should initiate from Option""") {
             val valid = Validated.fromOption(Option.just("Success"), { "Is null" })
+            // If 1st parameter on method "fromOption" is Some(null) it should return validate
+            val validFromOptionJustNullValue = Validated.fromOption(Option.just(null), { "Is null" })
+            // If 1st parameter on method "fromOption" is None ( because Option.fromNullable(null) return "None" )
+            // it should return Validated.Invalid
+            val validFromOptionFromNullable = Validated.fromOption(Option.fromNullable(null), { "Is null" })
             // If 1st parameter on method "fromOption" is "None" then return Validated.Invalid
             val invalid = Validated.fromOption(None, { "Is null" })
             assertSoftly {
                 valid.isValid shouldBe true
+                validFromOptionJustNullValue.isValid shouldBe true
+                validFromOptionFromNullable.isInvalid shouldBe true
                 invalid.isInvalid shouldBe true
             }
         }
