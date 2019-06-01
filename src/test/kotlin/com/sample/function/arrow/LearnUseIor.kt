@@ -1,6 +1,7 @@
 package com.sample.function.arrow
 
 import arrow.core.None
+import arrow.core.getOrElse
 import arrow.data.*
 import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
@@ -65,6 +66,49 @@ class LearnUseIor : DescribeSpec({
                 b.isBoth shouldBe true
                 b shouldBe Ior.Both("Failure", "Success")
             }
+        }
+    }
+    describe("""We can convert Ior to Either, Validated and Option""") {
+        val b = (None to "Success").bothIor()
+        val r = "Success".rightIor()
+        val l = None.leftIor()
+        it("should be the Right side value when convert from Ior.Both to Option") {
+            // Ior.Both it should convert to option with the Right side value
+            b.toOption().orNull() shouldBe "Success"
+            b.toOption().getOrElse { None } shouldBe "Success"
+        }
+        it("should be the Right side value when convert from Ior.Both to  Either") {
+            b.toEither().isRight() shouldBe true
+            b.toEither().isLeft() shouldNotBe true
+        }
+        it("should be the Right side value when convert from Ior.Both to  Validated") {
+            b.toValidated().isValid shouldBe true
+            b.toValidated().isInvalid shouldNotBe true
+        }
+        it("should be the Right side value when convert from Ior.Right to Option") {
+            r.toOption().orNull() shouldBe "Success"
+            r.toOption().getOrElse { None } shouldBe "Success"
+        }
+        it("should be the Right side value when convert from Ior.Right to  Either") {
+            r.toEither().isRight() shouldBe true
+            r.toEither().isLeft() shouldNotBe true
+        }
+        it("should be the Right side value when convert from Ior.Right to  Validated") {
+            r.toValidated().isValid shouldBe true
+            r.toValidated().isInvalid shouldNotBe true
+        }
+
+        it("should be the Left side value when convert from Ior.Left to Option") {
+            l.toOption().orNull() shouldBe null
+            l.toOption().getOrElse { None } shouldBe None
+        }
+        it("should be the Left side value when convert from Ior.Left to  Either") {
+            l.toEither().isLeft() shouldBe true
+            l.toEither().isRight() shouldNotBe true
+        }
+        it("should be the Left side value when convert from Ior.Left to  Validated") {
+            l.toValidated().isInvalid shouldBe true
+            l.toValidated().isValid shouldNotBe true
         }
     }
 })
