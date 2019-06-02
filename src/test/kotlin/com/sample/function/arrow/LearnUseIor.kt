@@ -134,4 +134,21 @@ class LearnUseIor : DescribeSpec({
                 { a, b -> "It have been both value $a and $b" }) shouldBe "It have been both value None and Success"
         }
     }
+
+    describe("""When use "mapLeft" on Ior.Left""") {
+        val l = None.leftIor()
+        val r = "Success".rightIor()
+        val b = (None to "Success").bothIor()
+        it("should return a container Ior.Left when \"mapLeft\" \"Ior.Left\" with a \"New value\" ") {
+            l.mapLeft { "New value" } shouldBe Ior.Left("New value")
+        }
+        it("should not modify Right side when use \"mapLeft\" on \"Ior.Right\" with a \"New value\"") {
+            r.mapLeft { "New value" } shouldBe Ior.Right("Success")
+        }
+
+        it("should be mofidy Left side only") {
+            b.mapLeft { "New value" } shouldBe ("New value" to "Success").bothIor()
+        }
+    }
+
 })
