@@ -146,7 +146,7 @@ class LearnUseIor : DescribeSpec({
             r.mapLeft { "New value" } shouldBe Ior.Right("Success")
         }
 
-        it("should be mofidy Left side only") {
+        it("should be modify Left side only") {
             b.mapLeft { "New value" } shouldBe ("New value" to "Success").bothIor()
         }
     }
