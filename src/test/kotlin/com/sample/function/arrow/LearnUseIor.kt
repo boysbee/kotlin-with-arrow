@@ -111,4 +111,27 @@ class LearnUseIor : DescribeSpec({
             l.toValidated().isValid shouldNotBe true
         }
     }
+    describe("""When use fold on Ior""") {
+        val b = (None to "Success").bothIor()
+        val r = "Success".rightIor()
+        val l = None.leftIor()
+
+        it("should fold with right value when Ior.Right") {
+            r.fold(
+                { "None" },
+                { "It is $it" },
+                { a, b -> "It have been both value $a and $b" }) shouldBe "It is Success"
+        }
+
+        it("should fold \"None\" when Ior.Left") {
+            l.fold({ "None" }, { "It is $it" }, { a, b -> "It have been both value $a and $b" }) shouldBe "None"
+        }
+
+        it("should fold have been both value when Ior.Both") {
+            b.fold(
+                { "None" },
+                { "It is $it" },
+                { a, b -> "It have been both value $a and $b" }) shouldBe "It have been both value None and Success"
+        }
+    }
 })
