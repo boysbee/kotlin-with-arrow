@@ -1,5 +1,7 @@
 package com.sample.function.arrow.typeclasses
 
+import arrow.core.Option
+import arrow.core.extensions.option.semigroup.semigroup
 import arrow.core.extensions.semigroup
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.FreeSpec
@@ -17,13 +19,13 @@ class LearnSemigroup : FreeSpec({
 
     """Lets start to understand "Semigroup"""" - {
         """Begin with with Int.semigroup""" - {
-            "semigroup of Int 1 combine 2" - {
+            "Int.semigroup of 1 combine 2" - {
                 "it should be 3" {
                     // 1 combine 2
                     Int.semigroup().run { 1.combine(2) } shouldBe 3
                 }
             }
-            """or use + instead combine operation""" - {
+            """or use `+` instead `combine` operation""" - {
                 "So 1 + 2" - {
                     "it should be 3 too" {
                         // 1 combine 2
@@ -33,7 +35,16 @@ class LearnSemigroup : FreeSpec({
 
             }
         }
+        """Let's do with Option""" - {
+            """combine 2 Option(Int)""" - {
+                val result = Option.semigroup(Int.semigroup()).run { Option(1).combine(Option(2)) }
+                """it should be Option(3)""" {
+                    result shouldBe Option(3)
+                }
+            }
+        }
 
 
     }
 })
+
