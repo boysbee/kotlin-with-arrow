@@ -1,4 +1,4 @@
-package com.sample.function.arrow
+package com.sample.function.arrow.datatypes
 
 import arrow.core.*
 import arrow.core.extensions.`try`.monad.binding

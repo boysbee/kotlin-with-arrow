@@ -1,4 +1,4 @@
-package com.sample.function.arrow
+package com.sample.function.arrow.datatypes
 
 import java.util.concurrent.ThreadLocalRandom
 
