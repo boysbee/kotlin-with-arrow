@@ -1,8 +1,11 @@
 package com.sample.function.arrow.typeclasses
 
+import arrow.core.Function0
 import arrow.core.Option
+import arrow.core.extensions.function0.semigroup.semigroup
 import arrow.core.extensions.option.semigroup.semigroup
 import arrow.core.extensions.semigroup
+import arrow.core.invoke
 import arrow.data.ListK
 import arrow.data.extensions.list.semigroupK.combineK
 import arrow.data.extensions.listk.semigroup.semigroup
@@ -76,6 +79,31 @@ class LearnSemigroup : FreeSpec({
                 }
             }
 
+        }
+
+        """Semigroup with Function0""" - {
+            """Function0 { 1 } combine with Function0 {1}""" - {
+                val fn = Function0.semigroup(Int.semigroup()).run {
+                    Function0 { 1 }.combine(Function0 { 1 })
+                }
+                "When we invoke function" - {
+                    "it should be 2" {
+                        // Like option when we invoke then a result of 2 function will `combine` a value
+                        fn.invoke() shouldBe 2
+                    }
+                }
+            }
+            """Let try with function that return sring""" - {
+                val fnString = Function0.semigroup(String.semigroup()).run {
+                    Function0 { "It should be" }.combine(Function0 { " " }).combine(Function0 { "Ok." })
+                }
+                "When we invoke function" - {
+                    "it should be \"It shoudl be Ok\"" {
+
+                        fnString.invoke() shouldBe "It should be Ok."
+                    }
+                }
+            }
         }
 
 
