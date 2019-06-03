@@ -3,6 +3,10 @@ package com.sample.function.arrow.typeclasses
 import arrow.core.Option
 import arrow.core.extensions.option.semigroup.semigroup
 import arrow.core.extensions.semigroup
+import arrow.data.ListK
+import arrow.data.extensions.list.semigroupK.combineK
+import arrow.data.extensions.listk.semigroup.semigroup
+import arrow.data.k
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.FreeSpec
 
@@ -42,6 +46,36 @@ class LearnSemigroup : FreeSpec({
                     result shouldBe Option(3)
                 }
             }
+        }
+
+        """Try with ListK""" - {
+            "use combine 2 list" - {
+                val result = ListK.semigroup<Int>().run {
+                    listOf(1, 2, 3).k().combine(listOf(4, 5, 6).k())
+                }
+                "it should be List[1,2,3,4,5,6]" {
+                    result shouldBe listOf(1, 2, 3, 4, 5, 6)
+                }
+            }
+
+            "use `+` 2 list" - {
+                val result = ListK.semigroup<Int>().run {
+                    listOf(1, 2, 3).k() + listOf(4, 5, 6).k()
+                }
+                "it should be List[1,2,3,4,5,6]" {
+                    result shouldBe listOf(1, 2, 3, 4, 5, 6)
+                }
+            }
+
+            "use `combineK` 2 list" - {
+                val result = ListK.semigroup<Int>().run {
+                    listOf(1, 2, 3).combineK(listOf(4, 5, 6).k())
+                }
+                "it should be List[1,2,3,4,5,6]" {
+                    result shouldBe listOf(1, 2, 3, 4, 5, 6)
+                }
+            }
+
         }
 
 
