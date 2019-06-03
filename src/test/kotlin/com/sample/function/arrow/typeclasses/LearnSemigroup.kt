@@ -1,15 +1,16 @@
 package com.sample.function.arrow.typeclasses
 
-import arrow.core.Function0
-import arrow.core.Option
+import arrow.core.*
+import arrow.core.extensions.`try`.semigroup.semigroup
 import arrow.core.extensions.function0.semigroup.semigroup
 import arrow.core.extensions.option.semigroup.semigroup
 import arrow.core.extensions.semigroup
-import arrow.core.invoke
 import arrow.data.ListK
 import arrow.data.extensions.list.semigroupK.combineK
 import arrow.data.extensions.listk.semigroup.semigroup
 import arrow.data.k
+import com.sample.function.arrow.datatypes.BadRequestException
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.FreeSpec
 
@@ -101,6 +102,31 @@ class LearnSemigroup : FreeSpec({
                     "it should be \"It shoudl be Ok\"" {
 
                         fnString.invoke() shouldBe "It should be Ok."
+                    }
+                }
+            }
+        }
+        """Semigroup with Try""" - {
+            """When combine 2 Try.Success""" - {
+                val t1 = Try { "Success" }
+                val t2 = Try { "Twice" }
+                val resultTry = Try.semigroup(String.semigroup()).run { t1.combine(t2) }
+                """It should return Try.Success""" {
+                    assertSoftly {
+
+                        resultTry.isSuccess() shouldBe true
+                        resultTry.getOrElse { None } shouldBe "SuccessTwice"
+                    }
+                }
+            }
+            """When combine with Try.Success and Try.Failure""" - {
+                val t1 = Try { "Success" }
+                val t2 = Try { throw BadRequestException() }
+                val resultTry = Try.semigroup(String.semigroup()).run { t1.combine(t2) }
+                """It should return Try.Failure""" {
+                    assertSoftly {
+                        resultTry.isFailure() shouldBe true
+                        resultTry.getOrElse { None } shouldBe None
                     }
                 }
             }
