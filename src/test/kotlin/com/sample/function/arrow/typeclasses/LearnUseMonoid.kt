@@ -1,7 +1,12 @@
 package com.sample.function.arrow.typeclasses
 
 import arrow.core.extensions.monoid
+import arrow.data.ListK
+import arrow.data.extensions.listk.monoid.monoid
+import arrow.data.k
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.FreeSpec
 
 class LearnUseMonoid : FreeSpec({
@@ -41,6 +46,56 @@ class LearnUseMonoid : FreeSpec({
                     result shouldBe "a"
                 }
             }
+        }
+
+
+        """from instance of list and the map is inner type""" - {
+            """list with map is inner type""" - {
+                """with empty""" - {
+                    "it should return empty list" {
+                        val result = ListK.monoid<String>().run {
+                            empty()
+                        }
+                        result.isEmpty() shouldBe true
+                    }
+                }
+                """combine empty with list("a") """ - {
+                    """it should return list("a")""" {
+                        val result = ListK.monoid<String>().run {
+                            listOf("a").k().combine(empty())
+                        }
+                        assertSoftly {
+                            result shouldBe listOf("a")
+                            result.isEmpty() shouldNotBe true
+                        }
+                    }
+                }
+
+                """combine empty with some of list("a"), list("b") and list("c")""" - {
+                    """it should return list("a","b","c") """ {
+                        val result = ListK.monoid<String>().run {
+                            listOf("a") + empty() + listOf("b") + listOf("c")
+                        }
+                        assertSoftly {
+                            result shouldBe listOf("a", "b", "c")
+                            result.isEmpty() shouldNotBe true
+                        }
+                    }
+
+
+                }
+                """combine list(map) and other map""" - {
+                    val result = ListK.monoid<Map<String, Int>>().run {
+                        mapOf("a" to 1, "b" to 2).k() + mapOf("c" to 3).k()
+                    }
+                    """It should be Map{"a" = 1, "b"=2 , "c"= 3} """ {
+                        result shouldBe mapOf("a" to 1, "b" to 2, "c" to 3)
+                    }
+                }
+
+            }
+
+
         }
 
     }
