@@ -61,7 +61,10 @@ class LearnUseMonoid : FreeSpec({
                         val result = ListK.monoid<String>().run {
                             empty()
                         }
-                        result.isEmpty() shouldBe true
+                        assertSoftly {
+                            result.isEmpty() shouldBe true
+                            result shouldBe ListK.empty()
+                        }
                     }
                 }
                 """combine empty with list("a") """ - {
