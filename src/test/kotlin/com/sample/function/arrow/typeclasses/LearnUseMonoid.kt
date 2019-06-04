@@ -15,12 +15,33 @@ class LearnUseMonoid : FreeSpec({
     """Let's learn use Monoid""" - {
 
         """from instance of String""" - {
-            val result = String.monoid().run {
-                empty()
+            """string monoid with empty string""" - {
+                val result = String.monoid().run {
+                    empty()
+                }
+                """it should be return empty String"""  {
+                    result shouldBe ""
+                }
             }
-            """it should be return empty String"""  {
-                result shouldBe ""
+
+            """combine string of a and b""" - {
+                val result = String.monoid().run {
+                    "a".combine("b")
+                }
+                """it should be return ab"""  {
+                    result shouldBe "ab"
+                }
+            }
+
+            """combine string of a and empty""" - {
+                val result = String.monoid().run {
+                    "a".combine(empty())
+                }
+                """it should be return a"""  {
+                    result shouldBe "a"
+                }
             }
         }
+
     }
 })
