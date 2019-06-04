@@ -1,6 +1,9 @@
 package com.sample.function.arrow.typeclasses
 
+import arrow.core.Option
+import arrow.core.Some
 import arrow.core.extensions.monoid
+import arrow.core.extensions.option.monoid.monoid
 import arrow.data.ListK
 import arrow.data.extensions.listk.monoid.monoid
 import arrow.data.k
@@ -19,7 +22,7 @@ class LearnUseMonoid : FreeSpec({
 
     """Let's learn use Monoid""" - {
 
-        """from instance of String""" - {
+        """String monoid""" - {
             """string monoid with empty string""" - {
                 val result = String.monoid().run {
                     empty()
@@ -49,8 +52,8 @@ class LearnUseMonoid : FreeSpec({
         }
 
 
-        """from instance of list and the map is inner type""" - {
-            """list with map is inner type""" - {
+        """List monoid""" - {
+            """list with String as inner type""" - {
                 """with empty""" - {
                     "it should return empty list" {
                         val result = ListK.monoid<String>().run {
@@ -84,19 +87,51 @@ class LearnUseMonoid : FreeSpec({
 
 
                 }
-                """combine list(map) and other map""" - {
-                    val result = ListK.monoid<Map<String, Int>>().run {
-                        mapOf("a" to 1, "b" to 2).k() + mapOf("c" to 3).k()
-                    }
-                    """It should be Map{"a" = 1, "b"=2 , "c"= 3} """ {
-                        result shouldBe mapOf("a" to 1, "b" to 2, "c" to 3)
+                """List with map as innner type""" - {
+                    """combine list(map) and other map""" - {
+                        val result = ListK.monoid<Map<String, Int>>().run {
+                            mapOf("a" to 1, "b" to 2).k() + mapOf("c" to 3).k()
+                        }
+                        """It should be Map{"a" = 1, "b"=2 , "c"= 3} """ {
+                            result shouldBe mapOf("a" to 1, "b" to 2, "c" to 3)
+                        }
                     }
                 }
+
 
             }
 
 
         }
 
+        """Option monoid""" - {
+            """with empty and some value""" - {
+                "it should be return Some(9)" {
+                    Option.monoid(Int.monoid()).run {
+                        listOf(
+                            empty(),
+                            Some(2),
+                            Some(3),
+                            Some(4),
+                            empty()
+                        ).combineAll()
+                    } shouldBe Some(9)
+                }
+            }
+            """with many some value then combine all together""" - {
+                "it should be return Some(15)" {
+                    Option.monoid(Int.monoid()).run {
+                        listOf(
+                            Some(1),
+                            Some(2),
+                            Some(3),
+                            Some(4),
+                            Some(5)
+                        ).combineAll()
+                    } shouldBe Some(15)
+                }
+            }
+        }
     }
+
 })
