@@ -135,10 +135,18 @@ class LearnUseMonoid : FreeSpec({
             }
         }
 
-        """Use "foldMap" """ - {
-            """it should be 15""" {
-                listOf(1, 2, 3, 4, 5).k().foldMap(Int.monoid(), ::identity) shouldBe 15
+        """Monoid with "foldMap" """ - {
+            """Int.monoid""" - {
+                """it should be 15""" {
+                    listOf(1, 2, 3, 4, 5).k().foldMap(Int.monoid(), ::identity) shouldBe 15
+                }
             }
+            """String.monoid""" - {
+                """it should be 12345""" {
+                    listOf(1, 2, 3, 4, 5).k().foldMap(String.monoid(), { it.toString() }) shouldBe "12345"
+                }
+            }
+
         }
     }
 
