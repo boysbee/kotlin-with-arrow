@@ -1,10 +1,10 @@
 package com.sample.function.arrow.typeclasses
 
-import arrow.core.Option
-import arrow.core.Some
+import arrow.core.*
+import arrow.core.extensions.combine
+import arrow.core.extensions.either.monoid.monoid
 import arrow.core.extensions.monoid
 import arrow.core.extensions.option.monoid.monoid
-import arrow.core.identity
 import arrow.data.ListK
 import arrow.data.extensions.list.foldable.foldMap
 import arrow.data.extensions.listk.monoid.monoid
@@ -136,6 +136,61 @@ class LearnUseMonoid : FreeSpec({
                             Some(5)
                         ).combineAll()
                     } shouldBe Some(15)
+                }
+            }
+        }
+        """Monoid in Either""" - {
+            """should be return right of empty of inner type""" - {
+                Either.monoid(String.monoid(), String.monoid()).run {
+                    empty()
+                } shouldBe Either.Right("")
+            }
+            """should be return combine of 2 Right""" {
+                assertSoftly {
+                    Either.right("a").combine(
+                        String.monoid(),
+                        String.monoid(),
+                        Either.right("b")
+                    ) shouldBe Either.Right("ab")
+
+                    Either.monoid(String.monoid(), String.monoid()).run {
+                        Either.Right("a").combine(Either.right("b"))
+                    } shouldBe Either.Right("ab")
+                }
+
+            }
+
+            """should be return 1 value of Right side when combine of Right and empty""" {
+                assertSoftly {
+                    Either.monoid(String.monoid(), String.monoid()).run {
+                        Either.Right("a").combine(empty())
+                    } shouldBe Either.Right("a")
+                }
+
+            }
+
+            """should be return 1 value of Left side when combine of Left and empty""" {
+                assertSoftly {
+                    Either.monoid(String.monoid(), String.monoid()).run {
+                        Either.Left("failure").combine(empty())
+                    } shouldBe Either.Left("failure")
+                }
+
+            }
+
+            """should return Left side when combine with Right and Left""" - {
+                assertSoftly {
+                    Either.monoid(String.monoid(), String.monoid()).run {
+                        Either.Left("failure").combine(Either.Right("a"))
+                    } shouldBe Either.Left("failure")
+                }
+            }
+
+            """should return Left when combine with Left and Left""" - {
+                assertSoftly {
+                    Either.monoid(String.monoid(), String.monoid()).run {
+                        Either.Left("failure").combine(Either.Left("failure too"))
+                    } shouldBe Either.Left("failurefailure too")
                 }
             }
         }
