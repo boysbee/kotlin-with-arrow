@@ -4,7 +4,9 @@ import arrow.core.Option
 import arrow.core.Some
 import arrow.core.extensions.monoid
 import arrow.core.extensions.option.monoid.monoid
+import arrow.core.identity
 import arrow.data.ListK
+import arrow.data.extensions.list.foldable.foldMap
 import arrow.data.extensions.listk.monoid.monoid
 import arrow.data.k
 import io.kotlintest.assertSoftly
@@ -130,6 +132,12 @@ class LearnUseMonoid : FreeSpec({
                         ).combineAll()
                     } shouldBe Some(15)
                 }
+            }
+        }
+
+        """Use "foldMap" """ - {
+            """it should be 15""" {
+                listOf(1, 2, 3, 4, 5).k().foldMap(Int.monoid(), ::identity) shouldBe 15
             }
         }
     }
