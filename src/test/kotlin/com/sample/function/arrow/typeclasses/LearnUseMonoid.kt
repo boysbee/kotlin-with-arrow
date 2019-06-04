@@ -64,6 +64,8 @@ class LearnUseMonoid : FreeSpec({
                         assertSoftly {
                             result.isEmpty() shouldBe true
                             result shouldBe ListK.empty()
+                            result shouldBe emptyList<String>().k()
+                            result.toList() shouldBe emptyList()
                         }
                     }
                 }
