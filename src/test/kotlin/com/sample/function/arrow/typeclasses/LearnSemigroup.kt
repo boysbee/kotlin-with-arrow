@@ -3,6 +3,8 @@ package com.sample.function.arrow.typeclasses
 import arrow.core.*
 import arrow.core.extensions.`try`.semigroup.semigroup
 import arrow.core.extensions.function0.semigroup.semigroup
+import arrow.core.extensions.function1.semigroup.semigroup
+import arrow.core.extensions.monoid
 import arrow.core.extensions.option.semigroup.semigroup
 import arrow.core.extensions.semigroup
 import arrow.data.ListK
@@ -94,7 +96,7 @@ class LearnSemigroup : FreeSpec({
                     }
                 }
             }
-            """Let try with function that return sring""" - {
+            """Let try with function that return string""" - {
                 val fnString = Function0.semigroup(String.semigroup()).run {
                     Function0 { "It should be" }.combine(Function0 { " " }).combine(Function0 { "Ok." })
                 }
@@ -105,6 +107,37 @@ class LearnSemigroup : FreeSpec({
                     }
                 }
             }
+            "Semigroup of Function0<A> is Function0<Semigroup<A>>" - {
+
+                val fn1 = Function0.semigroup(Int.semigroup()).run {
+                    Function0 { 1 }.combine(Function0 { 1 })
+                }
+                val fn2 = Int.semigroup().run { Function0 { 1.combine(1) } }
+                fn1.invoke() shouldBe fn2.invoke()
+            }
+        }
+
+        """Semigroup with Function1""" - {
+            """Function1 { 1 } combine with Function1 {1}""" - {
+                val fn = Function1.semigroup<Int, Int>(Int.semigroup()).run {
+                    Function1<Int, Int> { 1 }.combine(Function1 { 1 })
+                }
+                "When we invoke function" - {
+                    "it should be 2" {
+                        // Like option when we invoke then a result of 2 function will `combine` a value
+                        fn.invoke(1) shouldBe 2
+                    }
+                }
+
+            }
+            "Semigroup of Function1<A> is Function1<Semigroup<A>>" - {
+                val fn1 = Function1.semigroup<Int, Int>(Int.semigroup()).run {
+                    Function1<Int, Int> { it }.combine(Function1 { it })
+                }
+                val fn2 = Function1<Int, Int> { Int.monoid().run { it.combine(it) } }
+                fn1.invoke(1) shouldBe fn2.invoke(1)
+            }
+
         }
         """Semigroup with Try""" - {
             """When combine 2 Try.Success""" - {
