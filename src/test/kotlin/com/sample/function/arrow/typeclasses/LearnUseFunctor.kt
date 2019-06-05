@@ -20,5 +20,12 @@ class LearnUseFunctor : FreeSpec({
             val result: Option<Int> = Option<String>("2").map { it.toInt() }
             result shouldBe Some(2)
         }
+        """Try.map""" {
+            // F is Try
+            // A is String
+            // B is Int
+            val result: Try<Int> = Try<String> { "2" }.map { it.toInt() }
+            result shouldBe Try.Success(2)
+        }
     }
 })
