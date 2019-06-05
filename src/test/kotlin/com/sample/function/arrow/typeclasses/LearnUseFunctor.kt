@@ -17,6 +17,7 @@ class LearnUseFunctor : FreeSpec({
             // F is Option
             // A is String
             // B is Int
+            // Option<String>.map(f: (String) -> Int): Option<Int>
             val result: Option<Int> = Option<String>("2").map { it.toInt() }
             result shouldBe Some(2)
         }
@@ -24,6 +25,7 @@ class LearnUseFunctor : FreeSpec({
             // F is Try
             // A is String
             // B is Int
+            // Try<String>.map(f: (String) -> Int): Try<Int>
             val result: Try<Int> = Try<String> { "2" }.map { it.toInt() }
             result shouldBe Try.Success(2)
         }
