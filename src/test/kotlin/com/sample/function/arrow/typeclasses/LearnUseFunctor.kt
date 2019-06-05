@@ -1,6 +1,7 @@
 package com.sample.function.arrow.typeclasses
 
 import arrow.core.*
+import arrow.core.extensions.`try`.functor.functor
 import arrow.core.extensions.option.functor.functor
 
 import io.kotlintest.shouldBe
@@ -22,8 +23,8 @@ class LearnUseFunctor : FreeSpec({
                 val result: Option<Int> = Option<String>("2").map { it.toInt() }
                 result shouldBe Some(2)
             }
-            """Functor instance""" - {
-                """should be transform inner content""" {
+            """Option.Functor instance""" - {
+                """should be transform inner content of A to B""" {
                     Option.functor().run { Option("2").map { it.toInt() } } shouldBe Some(2)
                 }
 
@@ -38,7 +39,12 @@ class LearnUseFunctor : FreeSpec({
                 val result: Try<Int> = Try<String> { "2" }.map { it.toInt() }
                 result shouldBe Try.Success(2)
             }
+            """Try.Functor instance""" - {
+                """should be transform inner content of Success[A] to Success[B]""" {
+                    Try.functor().run { Try { "2" }.map { it.toInt() } } shouldBe Try.Success(2)
+                }
 
+            }
 
         }
         """Either.map""" - {
