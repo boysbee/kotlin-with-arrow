@@ -2,6 +2,7 @@ package com.sample.function.arrow.typeclasses
 
 import arrow.core.*
 import arrow.core.extensions.`try`.functor.functor
+import arrow.core.extensions.either.functor.functor
 import arrow.core.extensions.option.functor.functor
 
 import io.kotlintest.shouldBe
@@ -56,6 +57,14 @@ class LearnUseFunctor : FreeSpec({
                 // Either<String,String>.map(f: (String) -> Int): Either<String,Int>
                 val result: Either<String, Int> = Either.cond(true, { "2" }, { "0" }).map { it.toInt() }
                 result shouldBe Either.Right(2)
+            }
+            """Either.Functor instance""" - {
+                """should be transform inner content of Right[A] to Right[B]""" {
+                    Either.functor<String>().run { Either.right("2") }.map { it.toInt() } shouldBe Either.Right(
+                        2
+                    )
+                }
+
             }
 
         }
