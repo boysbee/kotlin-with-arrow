@@ -123,7 +123,7 @@ class LearnUseFunctor : FreeSpec({
 
             """Either.Functor.lift""" - {
                 """F of A to F of B""" - {
-                    // F is ForTry
+                    // F is ForEither
                     // A is Int
                     // B is Int
                     // `A -> B -> Kind<F, A> -> Kind<F, B>`
@@ -132,7 +132,7 @@ class LearnUseFunctor : FreeSpec({
                         val lifted = eitherFunctor.lift<Int, Int>({ n: Int -> n + 1 })
                         lifted(Either.right(1)) shouldBe Either.right(2)
                     }
-                    // F is ForTry
+                    // F is ForEither
                     // A is Int
                     // B is String
                     """should be lift from Either.Right(1) to Either.Right("2") """ {
