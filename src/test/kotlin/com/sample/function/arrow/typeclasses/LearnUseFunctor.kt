@@ -71,32 +71,53 @@ class LearnUseFunctor : FreeSpec({
             }
         }
 
+        /**
+         * From source code
+         * Lifts a function `A -> B` to the [F] structure returning a polymorphic function
+         * that can be applied over all [F] values in the shape of Kind<F, A>
+         *
+         * `A -> B -> Kind<F, A> -> Kind<F, B>`
+         */
         """Functor.lift method""" - {
-            """Option.lift""" - {
+            """Option.Functor.lift""" - {
                 """F of A to F of B""" - {
-                    /**
-                     * From source code
-                     * Lifts a function `A -> B` to the [F] structure returning a polymorphic function
-                     * that can be applied over all [F] values in the shape of Kind<F, A>
-                     *
-                     * `A -> B -> Kind<F, A> -> Kind<F, B>`
-                     */
                     // F is ForOption
                     // A is Int
                     // B is Int
                     // `A -> B -> Kind<F, A> -> Kind<F, B>`
-                    """should be lift Some(Int) to Some(Int)""" {
+                    """should be lift from Some(1) to Some(2)""" {
                         val optionFunctor = Option.functor()
                         val lifted = optionFunctor.lift<Int, Int>({ n: Int -> n + 1 })
                         lifted(Option(1)) shouldBe Some(2)
                     }
 
-                    """should be lift F of A to F of B""" {
+                    """should be lift from Option(1) to Some("2")""" {
                         val optionFunctor = Option.functor()
                         val lifted = optionFunctor.lift<Int, String>({ n: Int -> (n + 1).toString() })
                         lifted(Option(1)) shouldBe Some("2")
                     }
+                }
+            }
 
+            """Try.Functor.lift""" - {
+                """F of A to F of B""" - {
+                    // F is ForTry
+                    // A is Int
+                    // B is Int
+                    // `A -> B -> Kind<F, A> -> Kind<F, B>`
+                    """should be lift from Try.Success(1) to Try.Success(2)""" {
+                        val tryFunctor = Try.functor()
+                        val lifted = tryFunctor.lift<Int, Int>({ n: Int -> n + 1 })
+                        lifted(Try { 1 }) shouldBe Try.Success(2)
+                    }
+                    // F is ForTry
+                    // A is Int
+                    // B is String
+                    """should be lift from Try.Success(1) to Try.Success("2") """ {
+                        val tryFunctor = Try.functor()
+                        val lifted = tryFunctor.lift<Int, String>({ n: Int -> (n + 1).toString() })
+                        lifted(Try { 1 }) shouldBe Try.Success("2")
+                    }
                 }
             }
         }
