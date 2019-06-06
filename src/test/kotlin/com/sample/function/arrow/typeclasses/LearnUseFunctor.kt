@@ -120,6 +120,28 @@ class LearnUseFunctor : FreeSpec({
                     }
                 }
             }
+
+            """Either.Functor.lift""" - {
+                """F of A to F of B""" - {
+                    // F is ForTry
+                    // A is Int
+                    // B is Int
+                    // `A -> B -> Kind<F, A> -> Kind<F, B>`
+                    """should be lift from Either.Right(1) to Either.Right(2)""" {
+                        val eitherFunctor = Either.functor<Int>()
+                        val lifted = eitherFunctor.lift<Int, Int>({ n: Int -> n + 1 })
+                        lifted(Either.right(1)) shouldBe Either.right(2)
+                    }
+                    // F is ForTry
+                    // A is Int
+                    // B is String
+                    """should be lift from Either.Right(1) to Either.Right("2") """ {
+                        val eitherFunctor = Either.functor<Int>()
+                        val lifted = eitherFunctor.lift<Int, String>({ n: Int -> (n + 1).toString() })
+                        lifted(Either.right(1)) shouldBe Either.right("2")
+                    }
+                }
+            }
         }
 
     }
