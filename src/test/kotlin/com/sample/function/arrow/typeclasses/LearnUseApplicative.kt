@@ -1,7 +1,9 @@
 package com.sample.function.arrow.typeclasses
 
+import arrow.core.Either
 import arrow.core.Option
 import arrow.core.Some
+import arrow.core.extensions.either.applicative.just
 import arrow.data.ListK
 import arrow.data.k
 import io.kotlintest.shouldBe
@@ -23,6 +25,10 @@ class LearnUseApplicative : DescribeSpec({
         it("""should be result is ListK(1) when ListK.just(1)""") {
             val a: ListK<Int> = ListK.just(1)
             a shouldBe listOf(1).k()
+        }
+        it("""should be result is Right("success") """) {
+            val a: Either<Int, String> = "success".just()
+            a shouldBe Either.right("success")
         }
     }
 })
