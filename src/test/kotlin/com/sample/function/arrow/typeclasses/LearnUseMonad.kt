@@ -22,5 +22,11 @@ class LearnUseMonad : DescribeSpec({
             None.flatMap { f1 -> Some("Not none") } shouldBe None
         }
 
+        it("""should result is None when computation value of a is None and Some(b)""") {
+            val a: Option<Int> = None
+            val b: Option<Int> = Option.just(2)
+            val result = a.flatMap { f1 -> b.flatMap { f2 -> Some(f1 + f2) } }
+            result shouldBe None
+        }
     }
 })
