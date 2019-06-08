@@ -78,6 +78,11 @@ class LearnUseMonad : DescribeSpec({
             a.flatten() shouldBe Either.Right(1)
         }
 
+        it("should be return Either.Left(1) when combine Either.Right(Either.Left(1))") {
+            val a = Either.Right(Either.Left(1))
+            a.flatten() shouldBe Either.Left(1)
+        }
+
     }
 
 
