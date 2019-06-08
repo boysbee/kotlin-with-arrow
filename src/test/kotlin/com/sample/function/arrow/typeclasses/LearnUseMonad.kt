@@ -4,6 +4,8 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
 import arrow.core.Try
+import com.sample.function.arrow.datatypes.BadRequestException
+import io.kotlintest.matchers.types.shouldBeSameInstanceAs
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 
@@ -35,8 +37,15 @@ class LearnUseMonad : DescribeSpec({
         it("""should result is Try.Success(3) when computation value of Try.Success(1) and Try.Success(2)""") {
             val a: Try<Int> = Try { 1 }
             val b: Try<Int> = Try { 2 }
-            val result = a.flatMap { f1 -> b.flatMap { f2 -> Try.Success( f1 + f2) } }
+            val result = a.flatMap { f1 -> b.flatMap { f2 -> Try.Success(f1 + f2) } }
             result shouldBe Try.Success(3)
+        }
+
+        it("""should result is Try.Failure(Error) when computation value of Try.Success(1) and Try.Failure(Error)""") {
+            val a: Try<Int> = Try { 1 }
+            val b: Try<Int> = Try.Failure(BadRequestException())
+            val result = a.flatMap { f1 -> b.flatMap { f2 -> Try.Success(f1 + f2) } }
+            result.isFailure() shouldBe true
         }
     }
 
