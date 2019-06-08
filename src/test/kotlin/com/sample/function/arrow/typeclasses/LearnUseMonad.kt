@@ -4,6 +4,7 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
 import arrow.core.Try
+import arrow.core.extensions.option.monad.flatten
 import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.matchers.types.shouldBeSameInstanceAs
 import io.kotlintest.shouldBe
@@ -46,6 +47,13 @@ class LearnUseMonad : DescribeSpec({
             val b: Try<Int> = Try.Failure(BadRequestException())
             val result = a.flatMap { f1 -> b.flatMap { f2 -> Try.Success(f1 + f2) } }
             result.isFailure() shouldBe true
+        }
+    }
+
+    describe("Option flatten should combine nested container into one") {
+        it("should be return Some(2) when combine Some(Some(2))") {
+            val a = Option(Option(2))
+            a.flatten() shouldBe Some(2)
         }
     }
 
