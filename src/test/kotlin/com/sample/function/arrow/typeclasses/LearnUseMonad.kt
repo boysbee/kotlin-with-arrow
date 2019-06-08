@@ -1,6 +1,7 @@
 package com.sample.function.arrow.typeclasses
 
 import arrow.core.*
+import arrow.core.extensions.either.monad.flatten
 import arrow.core.extensions.option.monad.flatten
 import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.matchers.types.shouldBeSameInstanceAs
@@ -69,6 +70,14 @@ class LearnUseMonad : DescribeSpec({
             val a = Try.Success(Try.Failure(BadRequestException()))
             a.flatten().isFailure() shouldBe true
         }
+    }
+
+    describe("Either flatten should combine nested container into one") {
+        it("should be return Either.Right(1) when combine Either.Right(Either.Right(1))") {
+            val a = Either.Right(Either.Right(1))
+            a.flatten() shouldBe Either.Right(1)
+        }
+
     }
 
 
