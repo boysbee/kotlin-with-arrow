@@ -64,6 +64,11 @@ class LearnUseMonad : DescribeSpec({
             val a = Try.Success(Try.Success(1))
             a.flatten() shouldBe Try.Success(1)
         }
+
+        it("should be return Try.Failure(Error) when combine Try.Success(Try.Failure(Error))") {
+            val a = Try.Success(Try.Failure(BadRequestException()))
+            a.flatten().isFailure() shouldBe true
+        }
     }
 
 
