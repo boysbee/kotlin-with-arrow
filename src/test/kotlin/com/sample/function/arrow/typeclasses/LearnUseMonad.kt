@@ -1,9 +1,6 @@
 package com.sample.function.arrow.typeclasses
 
-import arrow.core.None
-import arrow.core.Option
-import arrow.core.Some
-import arrow.core.Try
+import arrow.core.*
 import arrow.core.extensions.option.monad.flatten
 import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.matchers.types.shouldBeSameInstanceAs
@@ -59,6 +56,13 @@ class LearnUseMonad : DescribeSpec({
         it("should be return Some(2) when combine Some(None)") {
             val a = Option(None)
             a.flatten() shouldBe None
+        }
+    }
+
+    describe("Try flatten should combine nested container into one") {
+        it("should be return Try.Success(1) when combine Try.Success(Try.Success(1))") {
+            val a = Try.Success(Try.Success(1))
+            a.flatten() shouldBe Try.Success(1)
         }
     }
 
