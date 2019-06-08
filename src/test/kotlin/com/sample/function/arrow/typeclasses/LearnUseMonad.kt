@@ -55,6 +55,11 @@ class LearnUseMonad : DescribeSpec({
             val a = Option(Option(2))
             a.flatten() shouldBe Some(2)
         }
+
+        it("should be return Some(2) when combine Some(None)") {
+            val a = Option(None)
+            a.flatten() shouldBe None
+        }
     }
 
 
