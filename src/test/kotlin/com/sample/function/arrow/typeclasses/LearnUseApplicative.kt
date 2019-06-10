@@ -1,6 +1,7 @@
 package com.sample.function.arrow.typeclasses
 
 import arrow.core.Either
+import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
 import arrow.core.extensions.either.applicative.just
@@ -48,6 +49,9 @@ class LearnUseApplicative : DescribeSpec({
         // Apply a function inside the type constructor’s context
         it("""should be Some(2) when apply function { n + 1 } after Some(1)""") {
             Option.applicative().run { Some(1).ap(Some({ n: Int -> n + 1 })) } shouldBe Some(2)
+        }
+        it("""should be None when apply function { n: Int -> n + 1 } from None""") {
+            Option.applicative().run { None.ap(Some({ n: Int -> n + 1 })) } shouldBe Some(1)
         }
 
     }
