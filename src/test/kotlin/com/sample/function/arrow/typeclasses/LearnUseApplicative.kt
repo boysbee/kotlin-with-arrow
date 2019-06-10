@@ -51,8 +51,10 @@ class LearnUseApplicative : DescribeSpec({
             Option.applicative().run { Some(1).ap(Some({ n: Int -> n + 1 })) } shouldBe Some(2)
         }
         it("""should be None when apply function { n: Int -> n + 1 } from None""") {
-            Option.applicative().run { None.ap(Some({ n: Int -> n + 1 })) } shouldBe Some(1)
+            Option.applicative().run { None.ap(Some({ n: Int -> n + 1 })) } shouldBe None
         }
 
     }
+
+
 })
