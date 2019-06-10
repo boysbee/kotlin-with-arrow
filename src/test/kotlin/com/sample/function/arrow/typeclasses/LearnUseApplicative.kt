@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.Option
 import arrow.core.Some
 import arrow.core.extensions.either.applicative.just
+import arrow.core.extensions.option.applicative.applicative
 import arrow.data.ListK
 import arrow.data.k
 import io.kotlintest.shouldBe
@@ -17,7 +18,7 @@ class LearnUseApplicative : DescribeSpec({
 
     // A constructor function, also known as pure in other languages.
     // It lifts a value into the computational context of a type constructor.
-    describe("just") {
+    describe("Option.just") {
         it("""should result is Some(1) when Option.just(1)""") {
             val a: Option<Int> = Option.just(1)
             a shouldBe Some(1)
@@ -40,6 +41,14 @@ class LearnUseApplicative : DescribeSpec({
         a shouldBe Try.Success("success")
         }
          */
+
+    }
+
+    describe("Option.ap") {
+        // Apply a function inside the type constructor’s context
+        it("""should be Some(2) when apply function { n + 1 } after Some(1)""") {
+            Option.applicative().run { Some(1).ap(Some({ n: Int -> n + 1 })) } shouldBe Some(2)
+        }
 
     }
 })
