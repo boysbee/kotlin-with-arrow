@@ -48,10 +48,10 @@ class LearnUseApplicative : DescribeSpec({
     // Apply a function inside the type constructor’s context
     describe("Option.ap") {
         it("""should be Some(2) when apply function { n + 1 } after Some(1)""") {
-            Option.applicative().run { Some(1).ap(Some({ n: Int -> n + 1 })) } shouldBe Some(2)
+            Option.applicative().run { Some(1).ap(Some { n: Int -> n + 1 }) } shouldBe Some(2)
         }
         it("""should be None when apply function { n: Int -> n + 1 } from None""") {
-            Option.applicative().run { None.ap(Some({ n: Int -> n + 1 })) } shouldBe None
+            Option.applicative().run { None.ap(Some { n: Int -> n + 1 }) } shouldBe None
         }
 
     }
@@ -59,7 +59,11 @@ class LearnUseApplicative : DescribeSpec({
     describe("Either.ap") {
 
         it("""should be Either.Right(2) when apply function { n + 1 } after Either.Right(1)""") {
-            Either.run { Either.Right(1).ap(Either.Right({ n: Int -> n + 1 })) } shouldBe Either.Right(2)
+            Either.run { Either.Right(1).ap(Either.Right { n: Int -> n + 1 }) } shouldBe Either.Right(2)
+        }
+
+        it("""should be Either.Left(2) when apply function { n + 1 } inside Either.Right after Either.Left(1)""") {
+            Either.run { Either.Left(1).ap(Either.Right { n: Int -> n + 1 }) } shouldBe Either.Left(1)
         }
 
 
