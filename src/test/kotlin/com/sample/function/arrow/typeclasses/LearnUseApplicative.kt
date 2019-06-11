@@ -4,6 +4,7 @@ import arrow.core.*
 import arrow.core.extensions.either.applicative.ap
 import arrow.core.extensions.either.applicative.just
 import arrow.core.extensions.option.applicative.applicative
+import arrow.core.extensions.option.applicative.map2
 import arrow.data.ListK
 import arrow.data.k
 import io.kotlintest.shouldBe
@@ -72,5 +73,12 @@ class LearnUseApplicative : DescribeSpec({
 
     }
 
+    describe("Option.map2") {
+        it("""should be return Some(1x) when apply function to map tuple with Some(1) and Some("x") """) {
+            Option.applicative().run { Some(1).map2(Some("x")) { z: Tuple2<Int, String> -> "${z.a}${z.b}" } } shouldBe Some(
+                "1x"
+            )
+        }
+    }
 
 })
