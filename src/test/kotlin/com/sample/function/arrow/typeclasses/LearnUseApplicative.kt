@@ -1,9 +1,6 @@
 package com.sample.function.arrow.typeclasses
 
-import arrow.core.Either
-import arrow.core.None
-import arrow.core.Option
-import arrow.core.Some
+import arrow.core.*
 import arrow.core.extensions.either.applicative.ap
 import arrow.core.extensions.either.applicative.just
 import arrow.core.extensions.option.applicative.applicative
@@ -61,6 +58,15 @@ class LearnUseApplicative : DescribeSpec({
 
         it("""should be Either.Right(2) when apply function { n + 1 } after Either.Right(1)""") {
             Either.run { Either.Right(1).ap(Either.Right({ n: Int -> n + 1 })) } shouldBe Either.Right(2)
+        }
+
+
+    }
+
+    describe("Try.ap") {
+
+        it("""should be 2 when apply function { n + 1 } after Try.Success(1)""") {
+            (Try.run { Try.Success(1).ap(Try.Success { n: Int -> n + 1 }) }).orNull() shouldBe 2
         }
 
 
