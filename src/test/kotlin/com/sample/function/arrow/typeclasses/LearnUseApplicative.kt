@@ -1,8 +1,11 @@
 package com.sample.function.arrow.typeclasses
 
+import arrow.Kind
 import arrow.core.*
 import arrow.core.extensions.either.applicative.ap
 import arrow.core.extensions.either.applicative.just
+import arrow.core.extensions.either.foldable.get
+import arrow.core.extensions.either.monad.flatten
 import arrow.core.extensions.option.applicative.applicative
 import arrow.core.extensions.option.applicative.map2
 import arrow.data.ListK
@@ -10,6 +13,7 @@ import arrow.data.k
 import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
+import kotlin.Function1
 
 class LearnUseApplicative : DescribeSpec({
     /**
@@ -62,13 +66,18 @@ class LearnUseApplicative : DescribeSpec({
             Either.run { Either.Right(1).ap(Either.Right { n: Int -> n + 1 }) } shouldBe Either.Right(2)
         }
 
-        it("""should be Either.Left(2) when apply function { n + 1 } inside Either.Right after Either.Left(1)""") {
+        it("""should be Either.Left(1) when apply function { n + 1 } inside Either.Right after Either.Left(1)""") {
             Either.run { Either.Left(1).ap(Either.Right { n: Int -> n + 1 }) } shouldBe Either.Left(1)
         }
 
+        it("""should be Either.Left when apply function { return Either.Left } inside Either.Right after Either.Right(1)""") {
+            Either.run {
+                Either.Right(1).ap(Either.Right { n: Int -> Either.Left(BadRequestException()) })
+            }.flatten().isLeft() shouldBe true
 
+
+        }
     }
-
     describe("Try.ap") {
 
         it("""should be 2 when apply function { n + 1 } after Try.Success(1)""") {
@@ -76,7 +85,9 @@ class LearnUseApplicative : DescribeSpec({
         }
 
         it("""should be Try.Failure when apply Try.Success with function { n + 1 } after Try.Failure(Error)""") {
-            (Try.run { Try.Failure(BadRequestException()).ap(Try.Success { n: Int -> n + 1 }) }).isFailure() shouldBe true
+            (Try.run {
+                Try.Failure(BadRequestException()).ap(Try.Success { n: Int -> n + 1 })
+            }).isFailure() shouldBe true
         }
 
 
