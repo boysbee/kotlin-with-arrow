@@ -95,6 +95,15 @@ class LearnUseApplicative : DescribeSpec({
                 "1x"
             )
         }
+
+        it("""should be return None when apply function to map tuple with Some(1) and None then invoke with .value()""") {
+            Option.applicative().run {
+                Some(1).map2Eval(
+                    Eval.later { None }
+                ) { z: Tuple2<Int, String> -> "${z.a}${z.b}" }
+
+            }.value() shouldBe None
+        }
     }
 
 })
