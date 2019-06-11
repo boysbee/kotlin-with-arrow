@@ -81,4 +81,17 @@ class LearnUseApplicative : DescribeSpec({
         }
     }
 
+    describe("Option.map2Eval") {
+        it("""should be return Some(1x) when apply function to map tuple with Some(1) and Some("x") then invoke with .value()""") {
+            Option.applicative().run {
+                Some(1).map2Eval(
+                    Eval.later { Some("x") }
+                ) { z: Tuple2<Int, String> -> "${z.a}${z.b}" }
+
+            }.value() shouldBe Some(
+                "1x"
+            )
+        }
+    }
+
 })
