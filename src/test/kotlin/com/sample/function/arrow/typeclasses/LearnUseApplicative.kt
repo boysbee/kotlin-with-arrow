@@ -7,6 +7,7 @@ import arrow.core.extensions.option.applicative.applicative
 import arrow.core.extensions.option.applicative.map2
 import arrow.data.ListK
 import arrow.data.k
+import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 
@@ -68,6 +69,10 @@ class LearnUseApplicative : DescribeSpec({
 
         it("""should be 2 when apply function { n + 1 } after Try.Success(1)""") {
             (Try.run { Try.Success(1).ap(Try.Success { n: Int -> n + 1 }) }).orNull() shouldBe 2
+        }
+
+        it("""should be Try.Failure when apply Try.Success with function { n + 1 } after Try.Failure(Error)""") {
+            (Try.run { Try.Failure(BadRequestException()).ap(Try.Success { n: Int -> n + 1 }) }).isFailure() shouldBe true
         }
 
 
