@@ -2,6 +2,7 @@ package com.sample.function.arrow.typeclasses
 
 import arrow.core.*
 import arrow.core.extensions.either.monad.flatten
+import arrow.core.extensions.option.monad.effectM
 import arrow.core.extensions.option.monad.flatten
 import arrow.core.extensions.option.monad.followedBy
 import arrow.core.extensions.option.monad.mproduct
@@ -120,4 +121,19 @@ class LearnUseMonad : DescribeSpec({
         }
     }
 
+    // effectM, Executes two elements sequentially and ignores the result of the second
+    describe("""Option.effectM""") {
+        it("""should be return Some(1) ignore a result inside effectM""") {
+            Some(1).effectM { i: Int -> Some(i + 2) }.getOrElse { None } shouldBe 1
+        }
+
+        it("""should be return "is None" not ignore None in effectM""") {
+            Some(1).effectM { i: Int -> None }.getOrElse { "is None" } shouldBe "is None"
+        }
+
+        it("""should be return "is None from first" not ignore None before effectM""") {
+            None.effectM { i: Int -> Some(1) }.getOrElse { "is None from first" } shouldBe "is None from first"
+        }
+
+    }
 })
