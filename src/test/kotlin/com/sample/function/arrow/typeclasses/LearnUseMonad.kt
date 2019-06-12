@@ -1,6 +1,7 @@
 package com.sample.function.arrow.typeclasses
 
 import arrow.core.*
+import arrow.core.extensions.`try`.monad.forEffect
 import arrow.core.extensions.either.monad.flatten
 import arrow.core.extensions.option.monad.*
 import com.sample.function.arrow.datatypes.BadRequestException
@@ -147,6 +148,21 @@ class LearnUseMonad : DescribeSpec({
         it("""should be return "is None first" not ignore a None before forEffect""") {
             None.forEffect(Some(1)).getOrElse { "is None first" } shouldBe "is None first"
         }
+
+    }
+
+    describe("""Try.forEffect""") {
+        it("""should be return Try.Success("first") ignore a result inside forEffect""") {
+            Try.just("first").forEffect(Try.just {
+                val word = "second"
+                println(word)
+            }) shouldBe Try.just("first")
+        }
+
+        it("""should be Try.Failure(Error) is true when use forEffect but ignore a result is Try.Success""") {
+            Try.Failure(BadRequestException()).forEffect(Try.just("success")).isFailure() shouldBe true
+        }
+
 
     }
 })
