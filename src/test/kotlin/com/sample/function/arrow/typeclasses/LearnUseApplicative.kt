@@ -92,7 +92,7 @@ class LearnUseApplicative : DescribeSpec({
 
 
     }
-
+    // Map 2 values inside the type constructor context and apply a function to their cartesian product
     describe("Option.map2") {
         it("""should be return Some(1x) when apply function to map tuple with Some(1) and Some("x") """) {
             Option.applicative().run { Some(1).map2(Some("x")) { z: Tuple2<Int, String> -> "${z.a}${z.b}" } } shouldBe Some(
@@ -103,7 +103,7 @@ class LearnUseApplicative : DescribeSpec({
             Option.applicative().run { Some(1).map2(None) { z: Tuple2<Int, String> -> "${z.a}${z.b}" } } shouldBe None
         }
     }
-
+    // Lazily map 2 values inside the type constructor context and apply a function to their cartesian product. Computation happens when .value() is invoked.
     describe("Option.map2Eval") {
         it("""should be return Some(1x) when apply function to map tuple with Some(1) and Some("x") then invoke with .value()""") {
             Option.applicative().run {
