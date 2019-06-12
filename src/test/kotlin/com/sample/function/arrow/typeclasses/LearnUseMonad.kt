@@ -2,10 +2,7 @@ package com.sample.function.arrow.typeclasses
 
 import arrow.core.*
 import arrow.core.extensions.either.monad.flatten
-import arrow.core.extensions.option.monad.effectM
-import arrow.core.extensions.option.monad.flatten
-import arrow.core.extensions.option.monad.followedBy
-import arrow.core.extensions.option.monad.mproduct
+import arrow.core.extensions.option.monad.*
 import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.matchers.types.shouldBeSameInstanceAs
 import io.kotlintest.shouldBe
@@ -127,12 +124,28 @@ class LearnUseMonad : DescribeSpec({
             Some(1).effectM { i: Int -> Some(i + 2) }.getOrElse { None } shouldBe 1
         }
 
-        it("""should be return "is None" not ignore None in effectM""") {
+        it("""should be return "is None" not ignore a None in effectM""") {
             Some(1).effectM { i: Int -> None }.getOrElse { "is None" } shouldBe "is None"
         }
 
-        it("""should be return "is None from first" not ignore None before effectM""") {
+        it("""should be return "is None from first" not ignore a None before effectM""") {
             None.effectM { i: Int -> Some(1) }.getOrElse { "is None from first" } shouldBe "is None from first"
+        }
+
+    }
+
+    // forEffect, Executes sequentially two elements that are independent from one another, ignoring the value of the second one.
+    describe("""Option.forEffect""") {
+        it("""should be return Some(1) ignore a result inside forEffect""") {
+            Some(1).forEffect(Some(2)).getOrElse { None } shouldBe 1
+        }
+
+        it("""should be return Some(1) not ignore a None inside forEffect""") {
+            Some(1).forEffect(None).getOrElse { "is None" } shouldBe "is None"
+        }
+
+        it("""should be return "is None first" not ignore a None before forEffect""") {
+            None.forEffect(Some(1)).getOrElse { "is None first" } shouldBe "is None first"
         }
 
     }
