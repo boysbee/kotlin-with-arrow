@@ -3,6 +3,7 @@ package com.sample.function.arrow.typeclasses
 import arrow.core.*
 import arrow.core.extensions.either.monad.flatten
 import arrow.core.extensions.option.monad.flatten
+import arrow.core.extensions.option.monad.mproduct
 import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.matchers.types.shouldBeSameInstanceAs
 import io.kotlintest.shouldBe
@@ -47,7 +48,7 @@ class LearnUseMonad : DescribeSpec({
             result.isFailure() shouldBe true
         }
     }
-
+    // flatten() , Combines two nested elements into one Kind<F, A>
     describe("Option flatten should combine nested container into one") {
         it("should be return Some(2) when combine Some(Some(2))") {
             val a = Option(Option(2))
@@ -85,5 +86,23 @@ class LearnUseMonad : DescribeSpec({
 
     }
 
+    // mpproduct ,Like flatMap, but it combines the two sequential elements in a Tuple2.
+    describe("""Option.mpproduct""") {
+        it("""should return Some(Tuple2("a","b")""") {
+            Some("a").mproduct { Some("b") } shouldBe Some(Tuple2("a", "b"))
+        }
+
+        it("""should return Some(Tuple2("1",10)""") {
+            Some("1").mproduct { Some(it.toInt() * 10) } shouldBe Some(Tuple2("1", 10))
+        }
+
+        it("""should return None when mpproduct Some by None""") {
+            Some("1").mproduct { None } shouldBe None
+        }
+
+        it("""should return None when mpproduct None by None""") {
+            None.mproduct { None } shouldBe None
+        }
+    }
 
 })
