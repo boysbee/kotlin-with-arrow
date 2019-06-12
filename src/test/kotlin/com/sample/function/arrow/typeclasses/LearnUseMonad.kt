@@ -3,6 +3,7 @@ package com.sample.function.arrow.typeclasses
 import arrow.core.*
 import arrow.core.extensions.either.monad.flatten
 import arrow.core.extensions.option.monad.flatten
+import arrow.core.extensions.option.monad.followedBy
 import arrow.core.extensions.option.monad.mproduct
 import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.matchers.types.shouldBeSameInstanceAs
@@ -102,6 +103,20 @@ class LearnUseMonad : DescribeSpec({
 
         it("""should return None when mpproduct None by None""") {
             None.mproduct { None } shouldBe None
+        }
+    }
+    // followedBy , Executes sequentially two elements that are independent from one another.
+    describe("""Option.followedBy""") {
+        it("""should return Some("b") when Some("a") followedBy Some("b") """) {
+            Some("a").followedBy(Some("b")) shouldBe Some("b")
+        }
+
+        it("""should return None when Some("a") followedBy None""") {
+            Some("a").followedBy(None) shouldBe None
+        }
+
+        it("""should return None when None followedBy None""") {
+            None.followedBy(None) shouldBe None
         }
     }
 
