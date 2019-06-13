@@ -5,6 +5,7 @@ import arrow.core.*
 import arrow.core.extensions.`try`.applicativeError.applicativeError
 import arrow.core.extensions.either.applicative.ap
 import arrow.core.extensions.either.applicative.just
+import arrow.core.extensions.either.applicativeError.applicativeError
 import arrow.core.extensions.either.foldable.get
 import arrow.core.extensions.either.monad.flatten
 import arrow.core.extensions.option.applicative.applicative
@@ -26,6 +27,12 @@ class LearnUseApplicativeError : DescribeSpec({
     describe("Try.raiseError") {
         it("""should be return Try.Failure when Try<A>.raiseError(throwable)""") {
             Try.applicativeError().raiseError<String>(BadRequestException()).isFailure() shouldBe true
+        }
+    }
+
+    describe("Either.raiseError") {
+        it("""should be return Either.Left when Either<A,B>.raiseError(B)""") {
+            Either.applicativeError<String>().raiseError<String>("Failure") shouldBe Left("Failure")
         }
     }
 
