@@ -1,21 +1,14 @@
 package com.sample.function.arrow.typeclasses
 
-import arrow.Kind
 import arrow.core.*
 import arrow.core.extensions.`try`.applicativeError.applicativeError
-import arrow.core.extensions.either.applicative.ap
-import arrow.core.extensions.either.applicative.just
 import arrow.core.extensions.either.applicativeError.applicativeError
-import arrow.core.extensions.either.foldable.get
-import arrow.core.extensions.either.monad.flatten
-import arrow.core.extensions.option.applicative.applicative
-import arrow.core.extensions.option.applicative.map2
-import arrow.data.ListK
-import arrow.data.k
+import arrow.core.extensions.either.applicativeError.raiseError
+import arrow.core.extensions.option.applicativeError.applicativeError
+import arrow.data.extensions.optiont.applicativeError.raiseError
 import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
-import kotlin.Function1
 
 class LearnUseApplicativeError : DescribeSpec({
 
@@ -33,6 +26,12 @@ class LearnUseApplicativeError : DescribeSpec({
     describe("Either.raiseError") {
         it("""should be return Either.Left when Either<A,B>.raiseError(B)""") {
             Either.applicativeError<String>().raiseError<String>("Failure") shouldBe Left("Failure")
+        }
+    }
+
+    describe("Option.raiseError") {
+        it("""should be return None when Option.raiseError()""") {
+            Option.applicativeError().run { Unit.raiseError<String>() } shouldBe None
         }
     }
 
