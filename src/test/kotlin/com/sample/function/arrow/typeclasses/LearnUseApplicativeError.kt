@@ -3,9 +3,7 @@ package com.sample.function.arrow.typeclasses
 import arrow.core.*
 import arrow.core.extensions.`try`.applicativeError.applicativeError
 import arrow.core.extensions.either.applicativeError.applicativeError
-import arrow.core.extensions.either.applicativeError.raiseError
 import arrow.core.extensions.option.applicativeError.applicativeError
-import arrow.data.extensions.optiont.applicativeError.raiseError
 import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
@@ -32,6 +30,9 @@ class LearnUseApplicativeError : DescribeSpec({
     describe("Option.raiseError") {
         it("""should be return None when Option.raiseError()""") {
             Option.applicativeError().run { Unit.raiseError<String>() } shouldBe None
+        }
+        it("""should be return None when raiseError with Unit """) {
+            Option.applicativeError().raiseError<String>(Unit) shouldBe None
         }
     }
 
