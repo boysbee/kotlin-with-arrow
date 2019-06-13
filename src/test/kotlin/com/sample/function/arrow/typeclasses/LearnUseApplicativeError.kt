@@ -54,4 +54,16 @@ class LearnUseApplicativeError : DescribeSpec({
             }
         }
     }
+
+    // found runtime error, java.lang.NoSuchMethodError: arrow.core.EitherKt.handleErrorWith(Larrow/Kind;Lkotlin/jvm/functions/Function1;)Larrow/core/Either;
+    // will back to find more information to fix this issue agian.
+//    describe("Either.handleErrorWith") {
+//        it("""should be return Either.Right when Either.Left<E>.handleErrorWith to recover error case""") {
+//
+//            val result:Either<Throwable, String> = Either.Left(BadRequestException()).handleErrorWith { Either.Right("Changed to success") }
+//            assertSoftly {
+//                result.isLeft() shouldNotBe true
+//            }
+//        }
+//    }
 })
