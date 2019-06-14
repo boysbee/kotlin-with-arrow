@@ -2,6 +2,7 @@ package com.sample.function.arrow.typeclasses
 
 import arrow.core.*
 import arrow.core.extensions.`try`.applicativeError.applicativeError
+import arrow.core.extensions.`try`.applicativeError.handleError
 import arrow.core.extensions.`try`.applicativeError.handleErrorWith
 import arrow.core.extensions.either.applicativeError.applicativeError
 import arrow.core.extensions.option.applicativeError.applicativeError
@@ -66,4 +67,18 @@ class LearnUseApplicativeError : DescribeSpec({
 //            }
 //        }
 //    }
+
+    /**
+     * handleError, Similar to handleErrorWith, except the function can return any regular value. This value will be wrapped and used as a return.
+     */
+
+    describe("Try.handleError") {
+        it("""should be return Try.Success when Try<A>.Failure(throwable).handleError to recover error case""") {
+            val result = Try.Failure(BadRequestException()).handleError { "After handleError then success" }
+            assertSoftly {
+                result.isFailure() shouldNotBe true
+                result shouldBe Success("After handleError then success")
+            }
+        }
+    }
 })
