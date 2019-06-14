@@ -104,4 +104,19 @@ class LearnUseApplicativeError : DescribeSpec({
             Try { (1 / 0) }.attempt().isSuccess() shouldBe true
         }
     }
+
+    /**
+     * catch,Runs the generator function to generate a success datatype,
+     * and if it throws an exception it uses the error mapping function to create a new failure datatype.
+     */
+    describe("""Try.catch""") {
+        it("""should return Try.Success(a) when catch not throw exception""") {
+            (Try.applicativeError().catch(::identity) { 1 } as Try<String>) shouldBe Try.Success(1)
+
+        }
+
+        it("""should return Try.Failure(error) when caught an exception""") {
+            (Try.applicativeError().catch(::identity) { throw BadRequestException() } as Try<String>).isFailure() shouldBe true
+        }
+    }
 })
