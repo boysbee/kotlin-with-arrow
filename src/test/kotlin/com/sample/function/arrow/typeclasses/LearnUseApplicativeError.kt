@@ -80,5 +80,13 @@ class LearnUseApplicativeError : DescribeSpec({
                 result shouldBe Success("After handleError then success")
             }
         }
+
+        it("""should be return Try<A>.Success(A) when Try<A>.Success(A) handleError""") {
+            val result = Try.Success("Ok").handleError { "This is Ok." }
+            assertSoftly {
+                result.isFailure() shouldNotBe true
+                result shouldBe Success("Ok")
+            }
+        }
     }
 })
