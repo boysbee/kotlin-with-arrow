@@ -2,6 +2,7 @@ package com.sample.function.arrow.typeclasses
 
 import arrow.core.*
 import arrow.core.extensions.`try`.applicativeError.applicativeError
+import arrow.core.extensions.`try`.applicativeError.attempt
 import arrow.core.extensions.`try`.applicativeError.handleError
 import arrow.core.extensions.`try`.applicativeError.handleErrorWith
 import arrow.core.extensions.either.applicativeError.applicativeError
@@ -88,6 +89,19 @@ class LearnUseApplicativeError : DescribeSpec({
                 result shouldBe Success("Ok")
                 result shouldNotBe Success("This is Ok.")
             }
+        }
+    }
+
+    /**
+     * attempt,Maps the current content of the datatype to an Either<E, A>, recovering from any previous error state.
+     */
+    describe("""Try.attempt""") {
+        it("""should return Success(Right(3) when Try { 9 /3 }.attempt()""") {
+            Try { (9 / 3) }.attempt() shouldBe Success(Right(3))
+        }
+
+        it("""should return Success(Left(ArithmeticException) when Try { 1 / 0 }.attempt()""") {
+            Try { (1 / 0) }.attempt().isSuccess() shouldBe true
         }
     }
 })
