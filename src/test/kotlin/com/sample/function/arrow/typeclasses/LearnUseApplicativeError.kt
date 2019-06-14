@@ -86,6 +86,7 @@ class LearnUseApplicativeError : DescribeSpec({
             assertSoftly {
                 result.isFailure() shouldNotBe true
                 result shouldBe Success("Ok")
+                result shouldNotBe Success("This is Ok.")
             }
         }
     }
