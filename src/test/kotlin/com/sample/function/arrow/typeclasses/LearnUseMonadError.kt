@@ -5,8 +5,11 @@ import arrow.core.Try
 import arrow.core.extensions.`try`.applicativeError.raiseError
 import arrow.core.extensions.`try`.monadError.ensure
 import arrow.core.extensions.either.applicativeError.raiseError
+import arrow.core.extensions.either.monadError.ensure
 import com.sample.function.arrow.datatypes.BadRequestException
+import io.kotlintest.assertSoftly
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.specs.DescribeSpec
 
 class LearnUseMonadError : DescribeSpec({
@@ -47,9 +50,30 @@ class LearnUseMonadError : DescribeSpec({
             val tryRequest: Try<String> = Try { "ok" }.ensure({ BadRequestException() }, { it === "ok" })
             tryRequest.isSuccess() shouldBe true
         }
-        it("""should be isFailure when Try.ensure with "not ok" is "ok" """) {
+        it("""should be isFailure when Try.ensure with "not ok" is not "ok" """) {
             val tryRequest: Try<String> = Try { "not ok" }.ensure({ BadRequestException() }, { it === "ok" })
             tryRequest.isFailure() shouldBe true
+        }
+    }
+
+    describe("Either.ensure") {
+        it("""should be right side when Either.ensure a result with "ok" is "ok" """) {
+            val either: Either<String, String> =
+                Either.cond(true, { "ok" }, { "not ok" }).ensure({ "this failure" }, { it === "ok" })
+            assertSoftly {
+
+                either.isRight() shouldBe true
+                either shouldBe Either.Right("ok")
+            }
+        }
+
+        it("""should be left side when Either.ensure a result with "not ok" is not "ok" """) {
+            val either: Either<String, String> =
+                Either.cond(true, { "ok" }, { "not ok" }).ensure({ "this failure" }, { it === "not ok" })
+            assertSoftly {
+                either.isRight() shouldNotBe true
+                either shouldBe Either.Left("this failure")
+            }
         }
     }
 
