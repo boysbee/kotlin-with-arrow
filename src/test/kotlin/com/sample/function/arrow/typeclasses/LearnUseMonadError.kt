@@ -1,5 +1,6 @@
 package com.sample.function.arrow.typeclasses
 
+import arrow.core.Try
 import arrow.core.extensions.`try`.applicativeError.raiseError
 import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.shouldBe
@@ -14,7 +15,7 @@ class LearnUseMonadError : DescribeSpec({
 
     describe("Try.raiseError") {
         it("""should be true return Error.raiseError""") {
-            val tryRequest = BadRequestException().raiseError<String>()
+            val tryRequest: Try<String> = BadRequestException().raiseError()
             tryRequest.isFailure() shouldBe true
         }
     }
