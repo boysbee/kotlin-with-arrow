@@ -1,6 +1,7 @@
-package com.sample.function.arrow.datatypes
+package com.sample.function.arrow.effect
 
 import arrow.effects.IO
+import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
 
@@ -23,6 +24,13 @@ class LearnUseIO : DescribeSpec({
         it("""should be return exception when raiseError """) {
             val contentError = IO.raiseError<String>(BadRequestException())
             contentError.attempt().unsafeRunSync().isLeft() shouldBe true
+        }
+    }
+
+    describe("""invoke IO,  Creates an IO that invokes one lambda function when run""") {
+        it("""should return"oK" when invokd with unsafeRunSync""") {
+            val contentIo = IO { "ok" }
+            contentIo.unsafeRunSync() shouldBe "ok"
         }
     }
 
