@@ -1,5 +1,6 @@
 package com.sample.function.arrow.effect
 
+import arrow.core.Right
 import arrow.effects.IO
 import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.shouldBe
@@ -40,6 +41,24 @@ class LearnUseIO : DescribeSpec({
             val ioJust = IO.just("ok")
             val ioSuspend = IO.defer { ioJust }
             ioSuspend.unsafeRunSync() shouldBe "ok"
+        }
+    }
+
+    describe("""IO.unsafeRunSync,it runs IO synchronously and returning its result blocking the current thread""") {
+        // To avoid crashing use attempt() first.
+        it("""should return Right("ok") when use attempt()""") {
+            IO { "ok" }.attempt().unsafeRunSync() shouldBe Right("ok")
+
+        }
+        // Not avoid crashing,not use attempt()
+        it("""should return "ok" when not use attempt()""") {
+            IO { "ok" }.unsafeRunSync() shouldBe "ok"
+
+        }
+
+        it("""should return left(error) when IO throw error """) {
+            IO { throw BadRequestException() }.attempt().unsafeRunSync().isLeft() shouldBe true
+
         }
     }
 })
