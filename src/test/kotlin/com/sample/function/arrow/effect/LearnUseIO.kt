@@ -61,4 +61,9 @@ class LearnUseIO : DescribeSpec({
 
         }
     }
+    describe("""IO.map transform IO<A> to IO<B>""") {
+        it("should return 1 when transform IO(\"1\") to IO(1) with map") {
+            IO.just("1").map { it.toInt() }.unsafeRunSync() shouldBe 1
+        }
+    }
 })
