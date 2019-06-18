@@ -28,10 +28,18 @@ class LearnUseIO : DescribeSpec({
     }
 
     describe("""invoke IO,  Creates an IO that invokes one lambda function when run""") {
-        it("""should return"oK" when invokd with unsafeRunSync""") {
+        it("""should return"oK" when invoke with unsafeRunSync""") {
             val contentIo = IO { "ok" }
-            contentIo.unsafeRunSync() shouldBe "ok"
+            contentIo.unsafeRunSync() shouldBe IO.invoke { "ok" }.unsafeRunSync()
         }
     }
 
+
+    describe("""IO suspend to defer the evaluation of an existing IO""") {
+        it("""should return defer "ok" when warp with IO.just """) {
+            val ioJust = IO.just("ok")
+            val ioSuspend = IO.defer { ioJust }
+            ioSuspend.unsafeRunSync() shouldBe "ok"
+        }
+    }
 })
