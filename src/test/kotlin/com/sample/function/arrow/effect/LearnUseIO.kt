@@ -35,7 +35,7 @@ class LearnUseIO : DescribeSpec({
     }
 
 
-    describe("""IO suspend to defer the evaluation of an existing IO""") {
+    describe("""IO.defer (IO.suspend in document) to defer the evaluation of an existing IO""") {
         it("""should return defer "ok" when warp with IO.just """) {
             val ioJust = IO.just("ok")
             val ioSuspend = IO.defer { ioJust }
