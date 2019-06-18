@@ -12,10 +12,17 @@ class LearnUseIO : DescribeSpec({
     // Construct
 
     // just,Used to wrap single values. It creates anIOthat returns an existing value.
-    describe("IO.just") {
-        it("""just return "ok"""") {
+    describe("""IO.just creates an IO that returns an existing value""") {
+        it("""should be return "oK'"""") {
             val content = IO.just("ok")
             content.unsafeRunSync() shouldBe "ok"
+        }
+    }
+    // raiseError, Used to notify of errors during execution. It creates an IO that returns an existing exception.
+    describe("""IO.raiseError creates an IO that returns an existing exception""") {
+        it("""should be return exception when raiseError """) {
+            val contentError = IO.raiseError<String>(BadRequestException())
+            contentError.attempt().unsafeRunSync().isLeft() shouldBe true
         }
     }
 
