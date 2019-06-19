@@ -5,6 +5,7 @@ import arrow.effects.IO
 import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
+import java.util.*
 
 class LearnUseIO : DescribeSpec({
     //IO is the most common data type used to represent side-effects in functional languages.
@@ -76,5 +77,19 @@ class LearnUseIO : DescribeSpec({
             IO { throw BadRequestException() }.attempt().unsafeRunSync().isLeft() shouldBe true
         }
 
+    }
+
+    describe("""IO.runAsync,It runs the current IO asynchronously, calling the callback parameter on completion and returning its result""") {
+        it("""should return OK""") {
+            // use stack instead callback ; :P
+            val stack = Stack<String>()
+            IO { "ok" }.runAsync { result ->
+                result.fold(
+                    { IO { stack.push("error"); return@IO } },
+                    { IO { stack.push("it's ok");return@IO } }
+                )
+            }.unsafeRunSync()
+            stack.pop() shouldBe "it's ok"
+        }
     }
 })
