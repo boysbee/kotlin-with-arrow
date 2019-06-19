@@ -1,7 +1,9 @@
 package com.sample.function.arrow.effect
 
+import arrow.core.Left
 import arrow.core.Right
 import arrow.core.Some
+import arrow.core.getOrElse
 import arrow.effects.IO
 import arrow.effects.typeclasses.milliseconds
 import com.sample.function.arrow.datatypes.BadRequestException
@@ -110,6 +112,13 @@ class LearnUseIO : DescribeSpec({
             IO { "ok" }
                 .attempt()
                 .unsafeRunTimed(3.milliseconds) shouldBe Some(Right("ok"))
+        }
+
+        it("""should return Some(Left(BadRequestException)""") {
+            val result = IO { throw BadRequestException() }
+                .attempt()
+                .unsafeRunTimed(3.milliseconds)
+            result.getOrElse { Left("something happened") }.isLeft() shouldBe true
         }
     }
 })
