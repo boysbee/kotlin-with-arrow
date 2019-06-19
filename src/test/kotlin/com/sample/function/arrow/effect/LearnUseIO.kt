@@ -49,23 +49,7 @@ class LearnUseIO : DescribeSpec({
         }
     }
 
-    describe("""IO.unsafeRunSync,it runs IO synchronously and returning its result blocking the current thread""") {
-        // To avoid crashing use attempt() first.
-        it("""should return Right("ok") when use attempt()""") {
-            IO { "ok" }.attempt().unsafeRunSync() shouldBe Right("ok")
 
-        }
-        // Not avoid crashing,not use attempt()
-        it("""should return "ok" when not use attempt()""") {
-            IO { "ok" }.unsafeRunSync() shouldBe "ok"
-
-        }
-
-        it("""should return left(error) when IO throw error """) {
-            IO { throw BadRequestException() }.attempt().unsafeRunSync().isLeft() shouldBe true
-
-        }
-    }
     describe("""IO.map transform IO<A> to IO<B>""") {
         it("should return 1 when transform IO(\"1\") to IO(1) with map") {
             IO.just("1").map { it.toInt() }.unsafeRunSync() shouldBe 1
@@ -105,6 +89,36 @@ class LearnUseIO : DescribeSpec({
                 )
             }.unsafeRunSync()
             stack.pop() shouldBe "it's error"
+        }
+    }
+
+    describe("""IO.unsafeRunAsync,It runs the current IO asynchronously, calling the callback parameter on completion""") {
+        it("""return it's ok when run success""") {
+            val stack = Stack<String>()
+            IO { "ok" }.unsafeRunAsync { result ->
+                result.fold(
+                    { stack.push("it's error") },
+                    { stack.push("it's ok") }
+                )
+            }
+            stack.pop() shouldBe "it's ok"
+        }
+    }
+    describe("""IO.unsafeRunSync,it runs IO synchronously and returning its result blocking the current thread""") {
+        // To avoid crashing use attempt() first.
+        it("""should return Right("ok") when use attempt()""") {
+            IO { "ok" }.attempt().unsafeRunSync() shouldBe Right("ok")
+
+        }
+        // Not avoid crashing,not use attempt()
+        it("""should return "ok" when not use attempt()""") {
+            IO { "ok" }.unsafeRunSync() shouldBe "ok"
+
+        }
+
+        it("""should return left(error) when IO throw error """) {
+            IO { throw BadRequestException() }.attempt().unsafeRunSync().isLeft() shouldBe true
+
         }
     }
     describe("""IO.unsafeRunTimed, it runs IO synchronously and returns an Option<A> blocking the current thread""") {
