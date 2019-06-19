@@ -66,4 +66,11 @@ class LearnUseIO : DescribeSpec({
             IO.just("1").map { it.toInt() }.unsafeRunSync() shouldBe 1
         }
     }
+
+    describe("""IO.attempt transform to Either<E,A>""") {
+        it("""should return Right side when result is success""") {
+            IO { "ok" }.attempt().unsafeRunSync() shouldBe Right("ok")
+        }
+
+    }
 })
