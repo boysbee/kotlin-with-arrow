@@ -72,5 +72,9 @@ class LearnUseIO : DescribeSpec({
             IO { "ok" }.attempt().unsafeRunSync() shouldBe Right("ok")
         }
 
+        it("""should return Left side when result is failure""") {
+            IO { throw BadRequestException() }.attempt().unsafeRunSync().isLeft() shouldBe true
+        }
+
     }
 })
