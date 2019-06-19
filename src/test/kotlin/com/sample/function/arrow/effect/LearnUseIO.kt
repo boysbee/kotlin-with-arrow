@@ -103,6 +103,17 @@ class LearnUseIO : DescribeSpec({
             }
             stack.pop() shouldBe "it's ok"
         }
+
+        it("""return it's ok when run failure""") {
+            val stack = Stack<String>()
+            IO { throw BadRequestException() }.unsafeRunAsync { result ->
+                result.fold(
+                    { stack.push("it's error") },
+                    { stack.push("it's ok") }
+                )
+            }
+            stack.pop() shouldBe "it's error"
+        }
     }
     describe("""IO.unsafeRunSync,it runs IO synchronously and returning its result blocking the current thread""") {
         // To avoid crashing use attempt() first.
