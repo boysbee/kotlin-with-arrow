@@ -80,7 +80,7 @@ class LearnUseIO : DescribeSpec({
     }
 
     describe("""IO.runAsync,It runs the current IO asynchronously, calling the callback parameter on completion and returning its result""") {
-        it("""should return ok when callback function run success""") {
+        it("""should return "it's ok" when callback function run success""") {
             // use stack instead callback ; :P
             val stack = Stack<String>()
             IO { "ok" }.runAsync { result ->
@@ -90,6 +90,17 @@ class LearnUseIO : DescribeSpec({
                 )
             }.unsafeRunSync()
             stack.pop() shouldBe "it's ok"
+        }
+
+        it("""should return "it's error" when callback function run failure""") {
+            val stack = Stack<String>()
+            IO { throw BadRequestException() }.runAsync { result ->
+                result.fold(
+                    { IO { stack.push("it's error"); return@IO } },
+                    { IO { stack.push("it's ok");return@IO } }
+                )
+            }.unsafeRunSync()
+            stack.pop() shouldBe "it's error"
         }
     }
 })
