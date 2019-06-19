@@ -1,7 +1,9 @@
 package com.sample.function.arrow.effect
 
 import arrow.core.Right
+import arrow.core.Some
 import arrow.effects.IO
+import arrow.effects.typeclasses.milliseconds
 import com.sample.function.arrow.datatypes.BadRequestException
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.DescribeSpec
@@ -101,6 +103,13 @@ class LearnUseIO : DescribeSpec({
                 )
             }.unsafeRunSync()
             stack.pop() shouldBe "it's error"
+        }
+    }
+    describe("""IO.unsafeRunTimed, it runs IO synchronously and returns an Option<A> blocking the current thread""") {
+        it("""should return Some(Right(ok)""") {
+            IO { "ok" }
+                .attempt()
+                .unsafeRunTimed(3.milliseconds) shouldBe Some(Right("ok"))
         }
     }
 })
