@@ -1,19 +1,19 @@
 package com.sample.function.arrow.datatypes
 
 import arrow.core.*
-import arrow.core.extensions.either.monad.binding
-import io.kotlintest.assertSoftly
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.DescribeSpec
+import io.kotest.assertions.assertSoftly
+import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+
 
 class LearnUseEither : DescribeSpec({
     describe("""Either, learn to use arrow-kt data type "Either" """) {
         // Let's start with how to initiate an instance of either data type.
         // Right side for successful value
-        val r: Either<String, String> = Either.right("success")
+        val r: Either<String, String> = Either.Right("success")
         // Left side for failure value
-        val l: Either<String, String> = Either.left("failure")
+        val l: Either<String, String> = Either.Left("failure")
         it("should return true if right is right side") {
             r.isRight() shouldBe true
         }
@@ -49,7 +49,7 @@ class LearnUseEither : DescribeSpec({
     describe("""Either can initiate instance based on a predicate""") {
         fun evenOrOdd(x: Int): Boolean = x % 2 == 0
         it("should be initiate right side when condition is true") {
-            val r = Either.cond(evenOrOdd(2), { "Odd" }, { "Even" })
+            val r = Either.conditionally(evenOrOdd(2), { "Odd" }, { "Even" })
             assertSoftly {
                 r.isRight() shouldBe true
                 r.isLeft() shouldNotBe true
@@ -57,7 +57,7 @@ class LearnUseEither : DescribeSpec({
             }
         }
         it("should be initiate left side when condition is false") {
-            val l = Either.cond(evenOrOdd(3), { "Odd" }, { "Even" })
+            val l = Either.conditionally(evenOrOdd(3), { "Odd" }, { "Even" })
             assertSoftly {
                 l.isLeft() shouldBe true
                 l.isRight() shouldNotBe true
@@ -83,12 +83,12 @@ class LearnUseEither : DescribeSpec({
             }
         }
         it("""should return left side if right side is null value when check with "leftIfNull" """) {
-            val r = Either.right(null)
-            r.leftIfNull({ "is null value" }) shouldBe Left("is null value")
+            val r = Either.Right(null)
+            r.leftIfNull({ "is null value" }) shouldBe Either.Right("is null value")
         }
         it("""should return left side check null value with "rightIfNotNull" """) {
             val r = null.rightIfNotNull { "is left side" }
-            r shouldBe Left("is left side")
+            r shouldBe Either.Left("is left side")
         }
     }
     describe("When we use operation \"flatMap\" with either data type ") {
@@ -106,7 +106,7 @@ class LearnUseEither : DescribeSpec({
             val r3: Either<Int, Int> = 3.left()
             val resultOfSum = r1.flatMap { a -> r2.flatMap { b -> r3.flatMap { c -> (a + b + c).right() } } }
             assertSoftly {
-                resultOfSum shouldBe Left(3)
+                resultOfSum shouldBe Either.Left(3)
                 resultOfSum.getOrElse { "Not continue be cause is r3 is on Left" } shouldBe "Not continue be cause is r3 is on Left"
             }
         }
@@ -121,14 +121,15 @@ class LearnUseEither : DescribeSpec({
              Type inference failed: Not enough information to infer parameter L in fun <L, A> binding(arg0: suspend MonadContinuation<Kind<ForEither, L>, *>.() -> A): Either<L, A>
 Please specify it explicitly.
              */
-            val result: Either<Int, Int> = binding {
-                val (a) = r1
-                val (b) = r2
-                val (c) = r3
-                a + b + c
+            val result: Either<Int, Int> = r1.flatMap { a ->
+                r2.flatMap { b ->
+                    r3.flatMap { c ->
+                        (a + b + c).right()
+                    }
+                }
             }
             assertSoftly {
-                result shouldBe Right(6)
+                result shouldBe Either.Right(6)
                 result.orNull() shouldBe 6
             }
         }
@@ -139,15 +140,15 @@ Please specify it explicitly.
             val r3: Either<Int, Int> = 3.right()
             val r4: Either<Int, Int> = (-1).left()
 
-            val result: Either<Int, Int> = binding {
-                val (a) = r1
-                val (b) = r2
-                val (c) = r3
-                val (d) = r4
-                a + b + c + d
+            val result: Either<Int, Int> = r1.flatMap { a ->
+                r2.flatMap { b ->
+                    r3.flatMap { c ->
+                        (a + b + c).right()
+                    }
+                }
             }
             assertSoftly {
-                result shouldBe Left(-1)
+                result shouldBe Either.Left(-1)
                 result.getOrHandle { l -> l * 99 } shouldBe (-99)
             }
         }
@@ -156,8 +157,8 @@ Please specify it explicitly.
     describe("When either with \"fold\" ") {
         it("should be handle both side with \"fold\"") {
             // operation "fold" will extrac the value from either or provide a default if the value is Left
-            val resultTrue = Either.cond(true, { 10 }, { -1 })
-            val resultFalse = Either.cond(false, { 10 }, { -1 })
+            val resultTrue = Either.conditionally(true, { 10 }, { -1 })
+            val resultFalse = Either.conditionally(false, { 10 }, { -1 })
             assertSoftly {
                 resultTrue.fold({ it * 99 }, { it * 99 }) shouldBe 990
                 resultFalse.fold({ it * 99 }, { it * 99 }) shouldBe -99

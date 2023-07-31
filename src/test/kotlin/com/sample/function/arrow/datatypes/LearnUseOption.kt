@@ -1,17 +1,15 @@
 package com.sample.function.arrow.datatypes
 
 import arrow.core.*
-import arrow.core.extensions.option.monad.binding
+import io.kotest.core.spec.style.DescribeSpec
 import org.junit.jupiter.api.Assertions.*
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 
 
-object LearnUseOption : Spek({
+object LearnUseOption : DescribeSpec({
 
     describe("Learn Option here") {
         describe("Initial Option with just a value") {
-            val a = Option.just("a")
+            val a = "a".toOption()
             it("should just value a") {
                 assertEquals("a", a.orNull())
             }
@@ -95,7 +93,7 @@ object LearnUseOption : Spek({
         }
 
         describe("You can use when statement to check option") {
-            val aFromJustA = Option.just("a")
+            val aFromJustA = "a".toOption()
             val bFromNullable = Option.fromNullable(null)
             // lambda
             val checkType: (Option<String>) -> Boolean = { c: Option<String> ->
@@ -117,8 +115,8 @@ object LearnUseOption : Spek({
         }
 
         describe("""Use flatMap to sequence computation""") {
-            val a: Option<Int> = Option.just(1)
-            val b: Option<Int> = Option.just(2)
+            val a: Option<Int> = 1.toOption()
+            val b: Option<Int> = 2.toOption()
             val c: Option<Int> = None
             it("""should result is 3 when computation value of a and b""") {
                 val result = a.flatMap { f1 -> b.flatMap { f2 -> Some(f1 + f2) } }
@@ -132,25 +130,26 @@ object LearnUseOption : Spek({
         }
 
         describe("""Use Monad ( binding )  to sequence computation""") {
-            val a: Option<Int> = Option.just(1)
-            val b: Option<Int> = Option.just(2)
+            val a: Option<Int> = 1.toOption()
+            val b: Option<Int> = 2.toOption()
             val c: Option<Int> = None
             // Look like the same as `flatMap` operation but like sequential computation
             it("""should result is 3 when computation value of a and b""") {
-                val result = binding {
-                    val (f1) = a
-                    val (f2) = b
-                    f1 + f2
+                val result = a.flatMap { f1 ->
+                    b.flatMap { f2 ->
+                        (f1 + f2).toOption()
+                    }
                 }
                 assertEquals(3, result.getOrElse { 0 })
             }
 
             it("""should "0" computation value of a, b and c when c is "None" """) {
-                val result = binding {
-                    val (f1) = a
-                    val (f2) = b
-                    val (f3) = c
-                    f1 + f2 + f3
+                val result = a.flatMap { f1 ->
+                    b.flatMap { f2 ->
+                        c.flatMap { f3 ->
+                            (f1 + f2 + f3).toOption()
+                        }
+                    }
                 }
                 assertEquals(0, result.getOrElse { 0 })
             }
