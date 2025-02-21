@@ -4,7 +4,8 @@ val junit_version: String by project
 val kotest_verison: String by project
 
 plugins {
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "2.1.0"
+    java
     application
     id("io.kotest.multiplatform") version "5.5.2"
 }
@@ -32,9 +33,12 @@ tasks.withType<Test>().configureEach {
 }
 
 tasks.compileKotlin {
-    kotlinOptions.jvmTarget = "17"
+    kotlinOptions {
+        jvmTarget = "21"
+    }
 }
-
-tasks.compileTestKotlin {
-    kotlinOptions.jvmTarget = "17"
+tasks.compileJava {
+    sourceCompatibility = "21"
+    targetCompatibility = "21"
+    options.encoding = "UTF-8"
 }

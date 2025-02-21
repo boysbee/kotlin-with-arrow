@@ -1,6 +1,6 @@
-package com.sample.function
+package com.sample.function.arrow.datatypes
 
-class BasicIKnew {
+class Basic {
     fun convToString(n: Int): String {
         val fn: (Int) -> String = { i -> i.toString() }
         return fn.invoke(n)
@@ -8,7 +8,7 @@ class BasicIKnew {
 
     // received function as parameter
     // (Int) -> String :: Function received integer value and return to string
-    fun convIntToMessage(i: Int, fn: (Int) -> String): String {
+    fun convertToMessage(i: Int, fn: (Int) -> String): String {
         return fn.invoke(i)
     }
 
@@ -40,6 +40,4 @@ class BasicIKnew {
     fun fn4(fn: (Int) -> String): (Int) -> (String) -> Int {
         return { i: Int -> { j: String -> j.toInt() + fn(i).toInt() } }
     }
-
-
 }
