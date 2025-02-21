@@ -49,15 +49,15 @@ class LearnUseEither : DescribeSpec({
     describe("""Either can initiate instance based on a predicate""") {
         fun evenOrOdd(x: Int): Boolean = x % 2 == 0
         it("should be initiate right side when condition is true") {
-            val r = Either.conditionally(evenOrOdd(2), { "Odd" }, { "Even" })
+            val r = if (evenOrOdd(2)) "Odd".right() else "Even".left()
             assertSoftly {
                 r.isRight() shouldBe true
                 r.isLeft() shouldNotBe true
-                r.toOption().orNull() shouldBe "Odd"
+                r.toOption().orNull() shouldBe "Odd".right()
             }
         }
         it("should be initiate left side when condition is false") {
-            val l = Either.conditionally(evenOrOdd(3), { "Odd" }, { "Even" })
+            val l = if (evenOrOdd(3)) "Odd".right() else "Even".left()
             assertSoftly {
                 l.isLeft() shouldBe true
                 l.isRight() shouldNotBe true
@@ -84,10 +84,10 @@ class LearnUseEither : DescribeSpec({
         }
         it("""should return left side if right side is null value when check with "leftIfNull" """) {
             val r = Either.Right(null)
-            r.leftIfNull({ "is null value" }) shouldBe Either.Right("is null value")
+            r.flatMap { b -> b?.right() ?: "is null value".left() } shouldBe Either.Left("is null value")
         }
         it("""should return left side check null value with "rightIfNotNull" """) {
-            val r = null.rightIfNotNull { "is left side" }
+            val r = null?.right() ?: "is left side".left()
             r shouldBe Either.Left("is left side")
         }
     }
@@ -143,7 +143,9 @@ Please specify it explicitly.
             val result: Either<Int, Int> = r1.flatMap { a ->
                 r2.flatMap { b ->
                     r3.flatMap { c ->
-                        (a + b + c).right()
+                        r4.flatMap { d ->
+                            (a + b + c + d).right()
+                        }
                     }
                 }
             }
@@ -157,8 +159,8 @@ Please specify it explicitly.
     describe("When either with \"fold\" ") {
         it("should be handle both side with \"fold\"") {
             // operation "fold" will extrac the value from either or provide a default if the value is Left
-            val resultTrue = Either.conditionally(true, { 10 }, { -1 })
-            val resultFalse = Either.conditionally(false, { 10 }, { -1 })
+            val resultTrue = if (true) 10.right() else (-1).left()
+            val resultFalse = if (false) 10.right() else (-1).left()
             assertSoftly {
                 resultTrue.fold({ it * 99 }, { it * 99 }) shouldBe 990
                 resultFalse.fold({ it * 99 }, { it * 99 }) shouldBe -99

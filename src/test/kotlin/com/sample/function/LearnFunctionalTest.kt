@@ -1,10 +1,9 @@
 package com.sample.function
 
+import io.kotest.core.spec.style.DescribeSpec
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
 
-object LearnFunctionalTest : Spek({
+object LearnFunctionalTest : DescribeSpec({
     describe("Learn basic function in kotlin in basic demo") {
         val demo = BasicIKnew()
         describe("function convert Integer to String") {
